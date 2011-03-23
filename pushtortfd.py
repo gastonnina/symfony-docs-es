@@ -4,7 +4,6 @@ import mechanize
 import netrc
 
 ######## config ########
-
 repo = 'test-sf-doc-es'
 
 ######## generar zip ########
@@ -37,18 +36,16 @@ f['password'] = n.hosts['readthedocs.org'][2]
 b.form = f
 b.submit()
 
-
 ######## submit zip file ########
 b.open('http://readthedocs.org/dashboard/upload_html/' + repo)
 
 f = [i for i in b.forms()][1]
-
 b.form = f
 
 b.form.add_file(open(buildname), filename=os.path.basename(buildname), name='content')
-
 b.form['overwrite'] = ['on']
-
 b.submit()
 
+# borramos el zip generado
+os.unlink(buildname)
 

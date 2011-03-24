@@ -7,6 +7,7 @@ import netrc
 repo = 'test-sf-doc-es'
 
 ######## generar zip ########
+print "Generando zip..."
 target_dir = os.path.join(os.path.realpath('.'), '_build', 'html')
 
 buildname = 'htmlbuild.zip'
@@ -19,6 +20,7 @@ for base, dirs, files in os.walk(target_dir):
         buildzip.write(fn, fn[rootlen:])
 buildzip.close()
 
+print "Zip generado, actualizando en el servidor..."
 ######## abrir navegador ########
 
 b = mechanize.Browser()
@@ -46,6 +48,8 @@ b.form.add_file(open(buildname), filename=os.path.basename(buildname), name='con
 b.form['overwrite'] = ['on']
 b.submit()
 
+print "Envío completado, borrando zip..."
 # borramos el zip generado
 os.unlink(buildname)
 
+print "Terminado."

@@ -193,7 +193,7 @@ en YAML, XML o PHP. Dele un vistazo a la configuración por omisión:
             entity_managers:
                 default:
                     mappings:
-                        AcmeDemoBundle: ~
+                        AcmeDemo: ~
 
     # Swiftmailer Configuration
     swiftmailer:
@@ -247,18 +247,18 @@ acuerdo al árbol de herencia del bundle.
 
 Cuando quiera hacer referencia a un archivo desde un bundle use esta notación:
 ``@BUNDLE_NAME/PATH_TO_FILE``; Symfony2 expandirá ``@BUNDLE_NAME`` a la ruta del
-bundle. Por ejemplo, convierte ``@AcmeDemoBundle/Controller/DemoController.php``
+bundle. Por ejemplo, convierte ``@AcmeDemo/Controller/DemoController.php``
 a ``src/Acme/DemoBundle/Controller/DemoController.php``.
 
 Para los controladores, usted necesita referenciar los nombres de los métodos:
 ``BUNDLE_NAME:CONTROLLER_NAME:ACTION_NAME``. Por ejemplo,
-``AcmeDemoBundle:Welcome:index`` significa el método ``indexAction`` de la clase
+``AcmeDemo:Welcome:index`` significa el método ``indexAction`` de la clase
 ``Acme\DemoBundle\Controller\WelcomeController``.
 
 Para las plantillas, es aún más interesante ya que las plantillas no necesitan
 ser guardadas en el sistema de ficheros. Usted puede fácilmente guardarlas, por
 ejemplo, en una tabla de la base de datos. Por ejemplo,
-``AcmeDemoBundle:Welcome:index.html.twig`` se convierte en
+``AcmeDemo:Welcome:index.html.twig`` se convierte en
 ``src/Acme/DemoBundle/Resources/views/Welcome/index.html.twig``.
 
 ¿Entiende ahora por qué Symfony2 es tan flexible? Comparta sus bundles entre

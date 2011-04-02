@@ -49,8 +49,8 @@ mandatory configuration parameter is ``transport``:
         <!-- app/config/config.xml -->
 
         <!--
-        xmlns:swiftmailer="http://www.symfony-project.org/schema/dic/swiftmailer"
-        http://www.symfony-project.org/schema/dic/swiftmailer http://www.symfony-project.org/schema/dic/swiftmailer/swiftmailer-1.0.xsd
+        xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+        http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
         -->
 
         <swiftmailer:config
@@ -76,7 +76,7 @@ mandatory configuration parameter is ``transport``:
 The majority of the Swiftmailer configuration deals with how the messages
 themselves should be delivered.
 
-The following configuration attribute are available:
+The following configuration attributes are available:
 
 * ``transport``         (``smtp``, ``mail``, ``sendmail``, or ``gmail``)
 * ``username``
@@ -109,7 +109,7 @@ an email is pretty straightforward::
             ->setSubject('Hello Email')
             ->setFrom('send@example.com')
             ->setTo('recipient@example.com')
-            ->setBody($this->renderView('HelloBundle:Hello:email', array('name' => $name)))
+            ->setBody($this->renderView('Hello:Hello:email', array('name' => $name)))
         ;
         $mailer->send($message);
 

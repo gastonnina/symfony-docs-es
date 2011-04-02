@@ -1,7 +1,7 @@
 How Symfony2 differs from symfony1
 ==================================
 
-The Symfony2 framework embodies a signficant evolution when compared with
+The Symfony2 framework embodies a significant evolution when compared with
 the first version of the framework. Fortunately, with the MVC architecture
 at its core, the skills used to master a symfony1 project continue to be
 very relevant when developing in Symfony2. Sure, ``app.yml`` is gone, but
@@ -115,7 +115,7 @@ The idea behind the autoloader is simple: the name of your class (including
 the namespace) must match up with the path to the file containing that class.
 Take the ``HelloController`` from the Symfony2 sandbox as an example::
 
-    namespace Sensio\HelloBundle\Controller;
+    namespace Acme\HelloBundle\Controller;
 
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -123,23 +123,35 @@ Take the ``HelloController`` from the Symfony2 sandbox as an example::
     {
         // ...
 
-The file itself lives at ``src/Sensio/HelloBundle/Controller/HelloController.php``.
+The file itself lives at ``src/Acme/HelloBundle/Controller/HelloController.php``.
 As you can see, the location of the file follows the namespace of the class.
-Specifically, the namespace, ``Sensio\HelloBundle\Controller``, spells out
-the directory that the file should live in (``src\Sensio\HelloBundle\Controller``).
+Specifically, the namespace, ``Acme\HelloBundle\Controller``, spells out
+the directory that the file should live in (``src\Acme\HelloController\Controller``).
+This is because, in the ``app/autoload.php`` file, you'll configure Symfony
+to look for the ``Acme`` namespace in the ``src`` directory:
+
+.. code-block:: php
+
+    // app/autoload.php
+
+    // ...
+    $loader->registerNamespaces(array(
+        // ...
+        'Acme'             => __DIR__.'/../src',
+    ));
 
 If the file did *not* live at this exact location, you'd receive a
-``Class "Sensio\HelloBundle\Controller\HelloController" does not exist.``
+``Class "Acme\HelloBundle\Controller\HelloController" does not exist.``
 error. In Symfony2, a "class does not exist" means that the suspect class
 namespace and physical location do not match. Basically, Symfony2 is looking
 in one exact location for that class, but that location doesn't exist (or
 contains a different class). In order for a class to be autoloaded, you
 **never need to clear your cache** in Symfony2.
 
-For the autoloader to work, however, it needs to know that the ``Sensio``
-namespace lives in the ``src`` directory and that, for example, the ``Doctrine``
-namespace lives in the ``vendor/doctrine/lib/`` directory. This mapping is
-entirely controlled by you via the ``app/autoload.php`` file.
+As mentioned before, for the autoloader to work, it needs to know that the
+``Acme`` namespace lives in the ``src`` directory and that, for example,
+the ``Doctrine`` namespace lives in the ``vendor/doctrine/lib/`` directory.
+This mapping is entirely controlled by you via the ``app/autoload.php`` file.
 
 Using the Console
 -----------------
@@ -211,19 +223,19 @@ In Symfony2, the bundles are activated inside the application kernel::
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             // ...
-            new Sensio\HelloBundle\HelloBundle(),
+            new Acme\HelloBundle\AcmeHelloBundle(),
         );
         
         return $bundles;
     }
 
-You also need to be sure that the ``Sensio`` namespace is set to be autoloaded::
+You also need to be sure that the ``Acme`` namespace is set to be autoloaded::
 
     // app/autoload.php
     $loader = new UniversalClassLoader();
     $loader->registerNamespaces(array(
         'Symfony'                        => __DIR__.'/../vendor/symfony/src',
-        'Sensio'                         => __DIR__.'/../src',
+        'Acme'                           => __DIR__.'/../src',
         // ...
     ));
 
@@ -234,7 +246,7 @@ include a routing resource from a bundle, you might do the following::
 
     # app/config/routing.yml
     hello:
-        resource: @HelloBundle/Resources/config/routing.yml
+        resource: @Hello/Resources/config/routing.yml
 
 To bring in configuration from the bundle, you'll need to import that configuration
 from your application configuration.

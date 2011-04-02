@@ -13,15 +13,17 @@ example:
     # app/config/config.yml
     doctrine:
         dbal:
-            driver:   pdo_mysql
-            dbname:   Symfony2
-            user:     root
-            password: null
+            connections:
+                default:
+                    driver:   pdo_mysql
+                    dbname:   Symfony2
+                    user:     root
+                    password: null
 
 The DoctrineBundle supports all parameters that all the default doctrine drivers
 accept, converted to the XML or YAML naming standards that Symfony enforces.
 See the Doctrine DBAL `documentation`_ for more information. Additionally
-there are some Symfony related options that you can configure. The following
+there are some Symfony-related options that you can configure. The following
 block shows all possible configuration keys without explaining their meaning
 further:
 
@@ -31,45 +33,50 @@ further:
 
         doctrine:
             dbal:
-                dbname:               database
-                host:                 localhost
-                port:                 1234
-                user:                 user
-                password:             secret
-                driver:               pdo_mysql
-                driver_class:         MyNamespace\MyDriverImpl
-                options:
-                    foo: bar
-                path:                 %kernel.data_dir%/data.sqlite
-                memory:               true
-                unix_socket:          /tmp/mysql.sock
-                wrapper_class:        MyDoctrineDbalConnectionWrapper
-                charset:              UTF-8
-                logging:              %kernel.debug%
-                platform_service:     MyOwnDatabasePlatformService
+                connections:
+                    default:
+                        dbname:               database
+                        host:                 localhost
+                        port:                 1234
+                        user:                 user
+                        password:             secret
+                        driver:               pdo_mysql
+                        driver_class:         MyNamespace\MyDriverImpl
+                        options:
+                            foo: bar
+                        path:                 %kernel.data_dir%/data.sqlite
+                        memory:               true
+                        unix_socket:          /tmp/mysql.sock
+                        wrapper_class:        MyDoctrineDbalConnectionWrapper
+                        charset:              UTF8
+                        logging:              %kernel.debug%
+                        platform_service:     MyOwnDatabasePlatformService
 
     .. code-block:: xml
 
-        <!-- xmlns:doctrine="http://www.symfony-project.org/schema/dic/doctrine" -->
-        <!-- xsi:schemaLocation="http://www.symfony-project.org/schema/dic/doctrine http://www.symfony-project.org/schema/dic/doctrine/doctrine-1.0.xsd"> -->
+        <!-- xmlns:doctrine="http://symfony.com/schema/dic/doctrine" -->
+        <!-- xsi:schemaLocation="http://symfony.com/schema/dic/doctrine http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd"> -->
 
         <doctrine:config>
-            <doctrine:dbal
-                dbname="database"
-                host="localhost"
-                port="1234"
-                user="user"
-                password="secret"
-                driver="pdo_mysql"
-                driver-class="MyNamespace\MyDriverImpl"
-                path="%kernel.data_dir%/data.sqlite"
-                memory="true"
-                unix-socket="/tmp/mysql.sock"
-                wrapper-class="MyDoctrineDbalConnectionWrapper"
-                charset="UTF-8"
-                logging="%kernel.debug%"
-                platform-service="MyOwnDatabasePlatformService"
-            />
+            <doctrine:dbal>
+                <doctrine:connection
+                    name="default"
+                    dbname="database"
+                    host="localhost"
+                    port="1234"
+                    user="user"
+                    password="secret"
+                    driver="pdo_mysql"
+                    driver-class="MyNamespace\MyDriverImpl"
+                    path="%kernel.data_dir%/data.sqlite"
+                    memory="true"
+                    unix-socket="/tmp/mysql.sock"
+                    wrapper-class="MyDoctrineDbalConnectionWrapper"
+                    charset="UTF8"
+                    logging="%kernel.debug%"
+                    platform-service="MyOwnDatabasePlatformService"
+                />
+            </doctrine:dbal>
         </doctrine:config>
 
 There are also a bunch of dependency injection container parameters
@@ -84,7 +91,6 @@ that allow you to specify which classes are used (with their default values):
         doctrine.dbal.event_manager_class: Doctrine\Common\EventManager
         doctrine.dbal.events.mysql_session_init.class: Doctrine\DBAL\Event\Listeners\MysqlSessionInit
         doctrine.dbal.events.oracle_session_init.class: Doctrine\DBAL\Event\Listeners\OracleSessionInit
-        doctrine.dbal.logging: false
 
 If you want to configure multiple connections you can do so by simply listing
 them under the key named ``connections``. All the parameters shown above
@@ -108,9 +114,11 @@ can also be specified in the connections subkeys.
                     host:             localhost
 
 If you have defined multiple connections you can use the
-``$this->get('doctrine.dbal.[connectionname]_connection)``
+``$this->get('doctrine.dbal.[connectionname]_connection')``
 as well but you must pass it an argument with the
-connection name that you want get::
+connection name that you want get
+
+.. code-block:: php
 
     class UserController extends Controller
     {
@@ -124,4 +132,4 @@ connection name that you want get::
         }
     }
 
-.. _documentation: http://www.doctrine-project.org/projects/dbal/2.0/docs/en
+.. _documentation: http://www.doctrine-project.org/docs/dbal/2.0/en

@@ -10,9 +10,11 @@ not available, not sufficient, or just wrong.
 
 .. note::
 
-    The Firewall is implemented via a ``core.security`` event, notified just
-    after the ``core.request`` one. All features described in this document
-    are implemented as listeners to this event.
+    The Firewall is implemented by registering
+    :class:`Symfony\\Component\\Security\\Http\\Firewall\\ListenerInterface`
+    objects with the firewall that are notified just after the ``onCoreRequest``
+    event is dispatched. All features described in this document are implemented
+    as listeners with the firewall.
 
 .. index::
    single: Security; Firewall
@@ -37,7 +39,7 @@ basic authentication:
             firewalls:
                 backend:
                     pattern:    /admin/.*
-                    form-login: true
+                    form_login: true
                     logout:     true
                 api:
                     pattern:    /api/.*
@@ -296,7 +298,7 @@ yourself::
                 $error = $this->get('request')->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
             }
 
-            return $this->render('SecurityBundle:Security:login.html.twig', array(
+            return $this->render('Security:Security:login.html.twig', array(
                 // last username entered by the user
                 'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
                 'error'         => $error,
@@ -358,7 +360,7 @@ Finally, add routes for the ``/login`` (``login_path`` value) and
 .. code-block:: xml
 
     <route id="_security_login" pattern="/login">
-        <default key="_controller">SecurityBundle:Security:login</default>
+        <default key="_controller">Security:Security:login</default>
     </route>
 
     <route id="_security_check" pattern="/login_check" />
@@ -442,6 +444,11 @@ configuration example that shows how to override them all:
                 )),
             ),
         ));
+
+.. note::
+
+    Unlike the ``login_path`` URL, the ``check_path`` URL must be located under
+    a secured pattern in order to be handled by the firewall.
 
 .. index::
    single: Security; X.509 certificates
@@ -788,7 +795,7 @@ firewall, or just for an authentication mechanism:
 
             providers:
                 default:
-                    entity: { class: SecurityBundle:User, property: username }
+                    entity: { class: Security:User, property: username }
                 certificate:
                     users:
                         fabien@example.com: { roles: ROLE_USER }
@@ -797,7 +804,7 @@ firewall, or just for an authentication mechanism:
                 backend:
                     pattern:    /admin/.*
                     x509:       { provider: certificate }
-                    form-login: { provider: default }
+                    form_login: { provider: default }
                     logout:     true
                 api:
                     provider:   default
@@ -811,7 +818,7 @@ firewall, or just for an authentication mechanism:
         <config>
             <encoder class="Symfony\Component\Security\Core\User\User" algorithm="sha1" />
             <provider name="default">
-                <entity class="SecurityBundle:User" property="username" />
+                <entity class="Security:User" property="username" />
             </provider>
 
             <provider name="certificate">
@@ -837,7 +844,7 @@ firewall, or just for an authentication mechanism:
             ),
             'providers' => array(
                 'default' => array(
-                    'entity' => array('class' => 'SecurityBundle:User', 'property' => 'username'),
+                    'entity' => array('class' => 'Security:User', 'property' => 'username'),
                 ),
                 'certificate' => array('users' => array(
                     'fabien@example.com' => array('roles' => 'ROLE_USER'),

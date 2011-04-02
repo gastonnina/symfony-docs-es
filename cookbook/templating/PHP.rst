@@ -5,7 +5,7 @@ How to use PHP instead of Twig for Templates
 ============================================
 
 Even if Symfony2 defaults to Twig for its template engine, you can still use
-plain PHP code if you want. Both templating engine are supported equally in
+plain PHP code if you want. Both templating engines are supported equally in
 Symfony2. Symfony2 adds some nice features on top of PHP to make writing
 templates with PHP more powerful.
 
@@ -16,11 +16,11 @@ To render a PHP template instead of a Twig one, use ``.php`` in the
 template name instead of ``.twig``. The controller below renders the
 ``index.html.php`` template::
 
-    // src/Sensio/HelloBundle/Controller/HelloController.php
+    // src/Acme/HelloBundle/Controller/HelloController.php
 
     public function indexAction($name)
     {
-        return $this->render('HelloBundle:Hello:index.html.php', array('name' => $name));
+        return $this->render('Hello:Hello:index.html.php', array('name' => $name));
     }
 
 .. index::
@@ -39,12 +39,12 @@ the ``extend()`` call:
 
 .. code-block:: html+php
 
-    <!-- src/Sensio/HelloBundle/Resources/views/Hello/index.html.php -->
-    <?php $view->extend('HelloBundle::layout.html.php') ?>
+    <!-- src/Acme/HelloBundle/Resources/views/Hello/index.html.php -->
+    <?php $view->extend('AcmeHello::layout.html.php') ?>
 
     Hello <?php echo $name ?>!
 
-The ``HelloBundle::layout.html.php`` notation sounds familiar, doesn't it? It
+The ``Hello::layout.html.php`` notation sounds familiar, doesn't it? It
 is the same notation used to reference a template. The ``::`` part simply
 means that the controller element is empty, so the corresponding file is
 directly stored under ``views/``.
@@ -53,7 +53,7 @@ Now, let's have a look at the ``layout.html.php`` file:
 
 .. code-block:: html+php
 
-    <!-- src/Sensio/HelloBundle/Resources/views/layout.html.php -->
+    <!-- src/Acme/HelloBundle/Resources/views/layout.html.php -->
     <?php $view->extend('::base.html.php') ?>
 
     <h1>Hello Application</h1>
@@ -63,12 +63,12 @@ Now, let's have a look at the ``layout.html.php`` file:
 The layout is itself decorated by another one (``::base.html.php``). Symfony2
 supports multiple decoration levels: a layout can itself be decorated by
 another one. When the bundle part of the template name is empty, views are
-looked for in the ``app/views/`` directory. This directory store global views
-for your entire project:
+looked for in the ``app/Resources/views/`` directory. This directory store
+global views for your entire project:
 
 .. code-block:: html+php
 
-    <!-- app/views/base.html.php -->
+    <!-- app/Resources/views/base.html.php -->
     <!DOCTYPE html>
     <html>
         <head>
@@ -101,18 +101,18 @@ decorating the template. In the ``index.html.php`` template, define a
 
 .. code-block:: html+php
 
-    <!-- src/Sensio/HelloBundle/Resources/views/Hello/index.html.php -->
-    <?php $view->extend('HelloBundle::layout.html.php') ?>
+    <!-- src/Acme/HelloBundle/Resources/views/Hello/index.html.php -->
+    <?php $view->extend('AcmeHello::layout.html.php') ?>
 
     <?php $view['slots']->set('title', 'Hello World Application') ?>
 
     Hello <?php echo $name ?>!
 
-The base layout already have the code to output the title in the header:
+The base layout already has the code to output the title in the header:
 
 .. code-block:: html+php
 
-    <!-- app/views/layout.html.php -->
+    <!-- app/Resources/views/layout.html.php -->
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?php $view['slots']->output('title', 'Hello Application') ?></title>
@@ -143,17 +143,17 @@ Create a ``hello.html.php`` template:
 
 .. code-block:: html+php
 
-    <!-- src/Sensio/HelloBundle/Resources/views/Hello/hello.html.php -->
+    <!-- src/Acme/HelloBundle/Resources/views/Hello/hello.html.php -->
     Hello <?php echo $name ?>!
 
 And change the ``index.html.php`` template to include it:
 
 .. code-block:: html+php
 
-    <!-- src/Sensio/HelloBundle/Resources/views/Hello/index.html.php -->
-    <?php $view->extend('HelloBundle::layout.html.php') ?>
+    <!-- src/Acme/HelloBundle/Resources/views/Hello/index.html.php -->
+    <?php $view->extend('AcmeHello::layout.html.php') ?>
 
-    <?php echo $view->render('HelloBundle:Hello:hello.html.php', array('name' => $name)) ?>
+    <?php echo $view->render('AcmeHello:Hello:hello.html.php', array('name' => $name)) ?>
 
 The ``render()`` method evaluates and returns the content of another template
 (this is the exact same method as the one used in the controller).
@@ -173,13 +173,13 @@ If you create a ``fancy`` action, and want to include it into the
 
 .. code-block:: html+php
 
-    <!-- src/Sensio/HelloBundle/Resources/views/Hello/index.html.php -->
-    <?php echo $view['actions']->render('HelloBundle:Hello:fancy', array('name' => $name, 'color' => 'green')) ?>
+    <!-- src/Acme/HelloBundle/Resources/views/Hello/index.html.php -->
+    <?php echo $view['actions']->render('Hello:Hello:fancy', array('name' => $name, 'color' => 'green')) ?>
 
-Here, the ``HelloBundle:Hello:fancy`` string refers to the ``fancy`` action of the
+Here, the ``Hello:Hello:fancy`` string refers to the ``fancy`` action of the
 ``Hello`` controller::
 
-    // src/Sensio/HelloBundle/Controller/HelloController.php
+    // src/Acme/HelloBundle/Controller/HelloController.php
 
     class HelloController extends Controller
     {
@@ -188,7 +188,7 @@ Here, the ``HelloBundle:Hello:fancy`` string refers to the ``fancy`` action of t
             // create some object, based on the $color variable
             $object = ...;
 
-            return $this->render('HelloBundle:Hello:fancy.html.php', array('name' => $name, 'object' => $object));
+            return $this->render('Hello:Hello:fancy.html.php', array('name' => $name, 'object' => $object));
         }
 
         // ...
@@ -229,10 +229,10 @@ pattern:
 
 .. code-block:: yaml
 
-    # src/Sensio/HelloBundle/Resources/config/routing.yml
+    # src/Acme/HelloBundle/Resources/config/routing.yml
     hello: # The route name
         pattern:  /hello/{name}
-        defaults: { _controller: HelloBundle:Hello:index }
+        defaults: { _controller: AcmeHello:Hello:index }
 
 Using Assets: images, JavaScripts, and stylesheets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

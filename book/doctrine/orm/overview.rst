@@ -24,33 +24,43 @@ necessary configuration is to specify the bundle name which contains your entiti
         # app/config/config.yml
         doctrine:
             orm:
-                mappings:
-                    HelloBundle: ~
+                default_entity_manager: default
+                entity_managers:
+                    default:
+                        mappings:
+                            AcmeHello: ~
 
     .. code-block:: xml
 
-        <!-- xmlns:doctrine="http://www.symfony-project.org/schema/dic/doctrine" -->
-        <!-- xsi:schemaLocation="http://www.symfony-project.org/schema/dic/doctrine http://www.symfony-project.org/schema/dic/doctrine/doctrine-1.0.xsd"> -->
+        <!-- xmlns:doctrine="http://symfony.com/schema/dic/doctrine" -->
+        <!-- xsi:schemaLocation="http://symfony.com/schema/dic/doctrine http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd"> -->
 
         <doctrine:config>
-            <doctrine:orm>
-                <mappings>
-                    <mapping name="HelloBundle" />
-                </mappings>
+            <doctrine:orm default-entity-manager="default">
+                <doctrine:entity-manager name="default">
+                    <doctrine:mapping name="AcmeHello" />
+                </doctrine:entity-manager>
             </doctrine:orm>
         </doctrine:config>
 
     .. code-block:: php
 
         $container->loadFromExtension('doctrine', array('orm' => array(
-            "mappings" => array("HelloBundle" => array())),
+            "default_entity_manager" => "default",
+            "entity_managers" => array(
+                "default => array(
+                    "mappings" => array("AcmeHello" => array()),
+                ),
+            ),
         ));
 
 As Doctrine provides transparent persistence for PHP objects, it works with
-any PHP class::
+any PHP class:
 
-    // Sensio/HelloBundle/Entity/User.php
-    namespace Sensio\HelloBundle\Entity;
+.. code-block:: php
+
+    // Acme/HelloBundle/Entity/User.php
+    namespace Acme\HelloBundle\Entity;
 
     class User
     {
@@ -85,10 +95,10 @@ write mapping information with annotations, XML, or YAML:
 
 .. configuration-block::
 
-    .. code-block:: php
+    .. code-block:: php-annotations
 
-        // Sensio/HelloBundle/Entity/User.php
-        namespace Sensio\HelloBundle\Entity;
+        // Acme/HelloBundle/Entity/User.php
+        namespace Acme\HelloBundle\Entity;
 
         /**
          * @orm:Entity
@@ -110,8 +120,8 @@ write mapping information with annotations, XML, or YAML:
 
     .. code-block:: yaml
 
-        # Sensio/HelloBundle/Resources/config/doctrine/metadata/orm/Sensio.HelloBundle.Entity.User.dcm.yml
-        Sensio\HelloBundle\Entity\User:
+        # Acme/HelloBundle/Resources/config/doctrine/metadata/orm/Acme.HelloBundle.Entity.User.dcm.yml
+        Acme\HelloBundle\Entity\User:
             type: entity
             table: user
             id:
@@ -122,17 +132,17 @@ write mapping information with annotations, XML, or YAML:
             fields:
                 name:
                     type: string
-                    length: 50
+                    length: 255
 
     .. code-block:: xml
 
-        <!-- Sensio/HelloBundle/Resources/config/doctrine/metadata/orm/Sensio.HelloBundle.Entity.User.dcm.xml -->
+        <!-- Acme/HelloBundle/Resources/config/doctrine/metadata/orm/Acme.HelloBundle.Entity.User.dcm.xml -->
         <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                             http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-            <entity name="Sensio\HelloBundle\Entity\User" table="user">
+            <entity name="Acme\HelloBundle\Entity\User" table="user">
                 <id name="id" type="integer" column="id">
                     <generator strategy="AUTO"/>
                 </id>
@@ -142,6 +152,11 @@ write mapping information with annotations, XML, or YAML:
         </doctrine-mapping>
 
 .. note::
+
+    When using annotations in your Symfony2 project you have to namespace all
+    Doctrine ORM annotations with the ``orm:`` prefix.
+
+.. tip::
 
     If you use YAML or XML to describe your entities, you can omit the creation
     of the Entity class, and let the ``doctrine:generate:entities`` command do
@@ -155,12 +170,14 @@ the following commands:
     $ php app/console doctrine:database:create
     $ php app/console doctrine:schema:create
 
-Eventually, use your entity and manage its persistent state with Doctrine::
+Eventually, use your entity and manage its persistent state with Doctrine:
 
-    // Sensio/HelloBundle/Controller/UserController.php
-    namespace Sensio\HelloBundle\Controller;
+.. code-block:: php
 
-    use Sensio\HelloBundle\Entity\User;
+    // Acme/HelloBundle/Controller/UserController.php
+    namespace Acme\HelloBundle\Controller;
+
+    use Acme\HelloBundle\Entity\User;
 
     class UserController extends Controller
     {
@@ -179,7 +196,7 @@ Eventually, use your entity and manage its persistent state with Doctrine::
         public function editAction($id)
         {
             $em = $this->get('doctrine.orm.entity_manager');
-            $user = $em->find('HelloBundle:User', $id);
+            $user = $em->find('AcmeHello:User', $id);
             $user->setBody('new body');
             $em->persist($user);
             $em->flush();
@@ -190,7 +207,7 @@ Eventually, use your entity and manage its persistent state with Doctrine::
         public function deleteAction($id)
         {
             $em = $this->get('doctrine.orm.entity_manager');
-            $user = $em->find('HelloBundle:User', $id);
+            $user = $em->find('AcmeHello:User', $id);
             $em->remove($user);
             $em->flush();
 
@@ -200,10 +217,12 @@ Eventually, use your entity and manage its persistent state with Doctrine::
 
 Now the scenario arises where you want to change your mapping information and
 update your development database schema without blowing away everything and
-losing your existing data. So first lets just add a new property to our ``User``
-entity::
+losing your existing data. So first let's just add a new property to our ``User``
+entity:
 
-    namespace Sensio\HelloBundle\Entity;
+.. code-block:: php
+
+    namespace Acme\HelloBundle\Entity;
 
     /** @orm:Entity */
     class User
@@ -223,5 +242,5 @@ Now your database will be updated and the new column added to the database
 table.
 
 
-.. _documentation: http://www.doctrine-project.org/projects/orm/2.0/docs/en
+.. _documentation: http://www.doctrine-project.org/docs/orm/2.0/en
 .. _Doctrine:      http://www.doctrine-project.org

@@ -82,15 +82,6 @@ Access control rules can match a request in many different ways:
                 # match the path info
                 - { path: /admin/.*, role: ROLE_ADMIN }
 
-                # match the controller class name
-                - { controller: .*\\.*Bundle\\Admin\\.*, role: ROLE_ADMIN }
-
-                # match any request attribute
-                -
-                    attributes:
-                        - { key: _controller, pattern: .*\\.*Bundle\\Admin\\.* }
-                    role: ROLE_ADMIN
-
     .. code-block:: xml
 
         <!-- app/config/security.xml -->
@@ -98,14 +89,6 @@ Access control rules can match a request in many different ways:
             <access-control>
                 <!-- match the path info -->
                 <rule path="/admin/.*" role="ROLE_ADMIN" />
-
-                <!-- match the controller class name -->
-                <rule controller=".*\\.*Bundle\\Admin\\.*" role="ROLE_ADMIN" />
-
-                <!-- match any request attribute -->
-                <rule role="ROLE_ADMIN">
-                    <attribute key="_controller" pattern=".*\\.*Bundle\\Admin\\.*" />
-                </rule>
             </access-control>
         </config>
 
@@ -116,17 +99,6 @@ Access control rules can match a request in many different ways:
             'access_control' => array(
                 // match the path info
                 array('path' => '/admin/.*', 'role' => 'ROLE_ADMIN'),
-
-                // match the controller class name
-                array('controller' => '.*\\.*Bundle\\Admin\\.*', 'role' => 'ROLE_ADMIN'),
-
-                // match any request attribute
-                array(
-                    'attributes' => array(
-                        array('key' => '_controller', 'pattern' => '.*\\.*Bundle\\Admin\\.*'),
-                    ),
-                    'role' => 'ROLE_ADMIN',
-                ),
             ),
         ));
 
@@ -181,17 +153,17 @@ syntax:
 
 .. configuration-block::
 
+    .. code-block:: jinja
+
+        {% if is_granted("ROLE_ADMIN") %}
+            <a href="...">Delete</a>
+        {% endif %}
+
     .. code-block:: php
 
         <?php if ($view['security']->isGranted('ROLE_ADMIN')): ?>
             <a href="...">Delete</a>
         <?php endif ?>
-
-    .. code-block:: jinja
-
-        {% if has_role("ROLE_ADMIN") %}
-            <a href="...">Delete</a>
-        {% endif %}
 
 .. note::
 

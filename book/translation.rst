@@ -107,13 +107,13 @@ When this code is executed, Symfony2 will attempt to translate the message
 we need to tell Symfony2 how to translate the message via a "translation
 resource", which is a collection of message translations for a given locale.
 This "dictionary" of translations can be created in several different formats,
-XML being the recommended format:
+XLIFF being the recommended format:
 
 .. configuration-block::
 
     .. code-block:: xml
 
-        <!-- messages.fr.xml -->
+        <!-- messages.fr.xliff -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
@@ -200,7 +200,7 @@ is done just as before:
 
     .. code-block:: xml
 
-        <!-- messages.fr.xml -->
+        <!-- messages.fr.xliff -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
@@ -284,13 +284,13 @@ according to the following pattern: ``domain.locale.loader``:
 
 * **locale**: The locale that the translations are for (e.g. ``en_GB``, ``en``, etc);
 
-* **loader**: How Symfony2 should load and parse the file (e.g. ``xml``, ``php``
-  or ``yml``).
+* **loader**: How Symfony2 should load and parse the file (e.g. ``xliff``,
+  ``php`` or ``yml``).
 
 The loader can be the name of any registered loader. By default, Symfony
 provides the following loaders:
 
-* ``xml``: XLIFF file;
+* ``xliff``: XLIFF file;
 * ``php``:   PHP file;
 * ``yml``:  YAML file.
 
@@ -320,7 +320,7 @@ or a unique identifier (e.g. "symfony2.great" - see the sidebar below):
 
     .. code-block:: xml
 
-        <!-- src/Sensio/MyBundle/Resources/translations/messages.fr.xml -->
+        <!-- src/Acme/DemoBundle/Resources/translations/messages.fr.xliff -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
@@ -339,7 +339,7 @@ or a unique identifier (e.g. "symfony2.great" - see the sidebar below):
 
     .. code-block:: php
 
-        // src/Sensio/MyBundle/Resources/translations/messages.fr.php
+        // src/Acme/DemoBundle/Resources/translations/messages.fr.php
         return array(
             'Symfony2 is great' => 'J\'aime Symfony2',
             'symfony2.great'    => 'J\'aime Symfony2',
@@ -347,7 +347,7 @@ or a unique identifier (e.g. "symfony2.great" - see the sidebar below):
 
     .. code-block:: yaml
 
-        # src/Sensio/MyBundle/Resources/translations/messages.fr.yml
+        # src/Acme/DemoBundle/Resources/translations/messages.fr.yml
         Symfony2 is great: J'aime Symfony2
         symfony2.great:    J'aime Symfony2
 
@@ -452,9 +452,9 @@ translations were split into three different domains: ``messages``, ``admin``
 and ``navigation``. The French translation would have the following message
 files:
 
-* ``messages.fr.xml``
-* ``admin.fr.xml``
-* ``navigation.fr.xml``
+* ``messages.fr.xliff``
+* ``admin.fr.xliff``
+* ``navigation.fr.xliff``
 
 When translating strings that are not in the default domain (``messages``),
 you must specify the domain as the third argument of ``trans()``:
@@ -536,14 +536,14 @@ by the routing system using the special ``_locale`` parameter:
 
         contact:
             pattern:   /{_locale}/contact
-            defaults:  { _controller: MyContactBundle:Contact:index, _locale: en }
+            defaults:  { _controller: AcmeDemo:Contact:index, _locale: en }
             requirements:
                 _locale: en|fr|de
 
     .. code-block:: xml
 
         <route id="contact" pattern="/{_locale}/contact">
-            <default key="_controller">MyContactBundle:Contact:index</default>
+            <default key="_controller">AcmeDemo:Contact:index</default>
             <default key="_locale">en</default>
             <requirement key="_locale">en|fr|de</requirement>
         </route>
@@ -555,12 +555,11 @@ by the routing system using the special ``_locale`` parameter:
 
         $collection = new RouteCollection();
         $collection->add('contact', new Route('/{_locale}/contact', array(
-            '_controller' => 'MyContactBundle:Contact:index',
+            '_controller' => 'AcmeDemo:Contact:index',
             '_locale'     => 'en',
         ), array(
             '_locale'     => 'en|fr|de'
         )));
-        $collection->addCollection($loader->import("HelloBundle/Resources/config/routing.php"));
 
         return $collection;
 

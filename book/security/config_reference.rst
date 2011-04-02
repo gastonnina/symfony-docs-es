@@ -17,14 +17,14 @@ Configuration Reference
 
             encoders:
                 somename:
-                    class: MyBundle/Entity/MyUser
-                MyBundle/Entity/MyUser: sha512
-                MyBundle/Entity/MyUser: plaintext
-                MyBundle/Entity/MyUser:
+                    class: MyBundle\Entity\MyUser
+                MyBundle\Entity\MyUser: sha512
+                MyBundle\Entity\MyUser: plaintext
+                MyBundle\Entity\MyUser:
                     algorithm: sha512
                     encode_as_base64: true
                     iterations: 5
-                MyBundle/Entity/MyUser:
+                MyBundle\Entity\MyUser:
                     id: my.custom.encoder.service.id
 
             providers:
@@ -34,7 +34,7 @@ Configuration Reference
                         foo: { password: foo, roles: ROLE_USER }
                         bar: { password: bar, roles: [ROLE_USER, ROLE_ADMIN] }
                 entity:
-                    entity: { class: SecurityBundle:User, property: username }
+                    entity: { class: Security:User, property: username }
 
             factories:
                 MyFactory: %kernel.root_dir%/../src/MyVendor/MyBundle/Resources/config/security_factories.xml
@@ -99,7 +99,8 @@ Configuration Reference
                     host: mydomain.foo
                     ip: 192.0.0.0/8
                     attributes:
-                        _controller: SomeController
+                        # a key to some controller
+                        _controller: AcmeDemo:Demo:access
                     roles: [ROLE_A, ROLE_B]
                     requires_channel: https
 

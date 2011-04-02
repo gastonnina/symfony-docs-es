@@ -80,7 +80,7 @@ your application and forward them on to the client. The cache is the "middle-man
 of the request-response communication between the client and your application.
 
 Along the way, the cache will store each response that is deemed "cacheable"
-(See :ref:`intro_to_http_cache`). If the same resource is requested again,
+(See :ref:`http-cache-introduction`). If the same resource is requested again,
 the cache sends the cached response to the client, ignoring your application
 entirely.
 
@@ -125,10 +125,10 @@ Each response from your application will likely go through one or both of
 the first two cache types. These caches are outside of your control but follow
 the HTTP cache directions set in the response.
 
-.. _`symfony-gateway-cache`:
-
 .. index::
    single: Cache; Symfony2 Reverse Proxy
+
+.. _`symfony-gateway-cache`:
 
 Symfony2 Reverse Proxy
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -145,7 +145,7 @@ kernel::
 
     // web/app.php
 
-    require_once __DIR__.'/../app/bootstrap_cache.php';
+    require_once __DIR__.'/../app/bootstrap_cache.php.cache';
     require_once __DIR__.'/../app/AppCache.php';
 
     use Symfony\Component\HttpFoundation\Request;
@@ -250,7 +250,7 @@ misses.
 .. index::
    single: Cache; HTTP
 
-.. http-cache-introduction:
+.. _http-cache-introduction:
 
 Introduction to HTTP Caching
 ----------------------------
@@ -545,7 +545,7 @@ md5 of the content::
 
     public function indexAction()
     {
-        $response = $this->renderView('MyBundle:Main:index.html.twig');
+        $response = $this->renderView('My:Main:index.html.twig');
         $response->setETag(md5($response->getContent()));
         $response->isNotModified($this->get('request'));
 
@@ -578,7 +578,7 @@ Validation with the ``Last-Modified`` Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``Last-Modified`` header is the second form of validation. According
-to the HTTP sepecification, "The ``Last-Modified`` header field indicates
+to the HTTP specification, "The ``Last-Modified`` header field indicates
 the date and time at which the origin server believes the representation
 was last modified." In other words, the application decides whether or not
 the cached content has been updated based on whether or not it's been updated
@@ -618,6 +618,8 @@ code.
 .. index::
    single: Cache; Conditional Get
    single: HTTP; 304
+
+.. _optimizing-cache-validation:
 
 Optimizing your Code with Validation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -801,14 +803,14 @@ First, to use ESI, be sure to enable it in your application configuration:
         # app/config/config.yml
         framework:
             # ...
-            esi: {}
+            esi: { enabled: true }
 
     .. code-block:: xml
 
         <!-- app/config/config.xml -->
         <framework:config ...>
             <!-- ... -->
-            <framework:esi />
+            <framework:esi enabled="true" />
         </framework:config>
 
     .. code-block:: php
@@ -816,7 +818,7 @@ First, to use ESI, be sure to enable it in your application configuration:
         // app/config/config.php
         $container->loadFromExtension('framework', array(
             // ...
-            'esi'    => array(),
+            'esi'    => array('enabled' => true),
         ));
 
 Now, suppose we have a page that is relatively static, except for a news
@@ -827,7 +829,7 @@ independent of the rest of the page.
 
     public function indexAction()
     {
-        $response = $this->renderView('MyBundle:MyController:index.html.twig');
+        $response = $this->renderView('My:MyController:index.html.twig');
         $response->setSharedMaxAge(600);
 
         return $response;
@@ -845,7 +847,7 @@ matter), Symfony2 uses the standard ``render`` helper to configure ESI tags:
 
     .. code-block:: jinja
 
-        {% render '...:list' with {}, {'standalone': true} %}
+        {% render '...:news' with {}, {'standalone': true} %}
 
     .. code-block:: php
 
@@ -899,7 +901,7 @@ the ``_internal`` route:
 
         # app/config/routing.yml
         _internal:
-            resource: @FrameworkBundle/Resources/config/routing/internal.xml
+            resource: "@Framework/Resources/config/routing/internal.xml"
             prefix:   /_internal
 
     .. code-block:: xml
@@ -907,11 +909,11 @@ the ``_internal`` route:
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
 
-        <routes xmlns="http://www.symfony-project.org/schema/routing"
+        <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.symfony-project.org/schema/routing http://www.symfony-project.org/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <import resource="@FrameworkBundle/Resources/config/routing/internal.xml" prefix="/_internal" />
+            <import resource="@Framework/Resources/config/routing/internal.xml" prefix="/_internal" />
         </routes>
 
     .. code-block:: php
@@ -920,7 +922,7 @@ the ``_internal`` route:
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
-        $collection->addCollection($loader->import('@FrameworkBundle/Resources/config/routing/internal.xml', '/_internal'));
+        $collection->addCollection($loader->import('@Framework/Resources/config/routing/internal.xml', '/_internal'));
 
         return $collection;
 
@@ -1018,7 +1020,7 @@ Varnish.
 Learn more from the Cookbook
 ----------------------------
 
-* :doc:`/cookbook/varnish/varnish`
+* :doc:`/cookbook/cache/varnish`
 
 .. _`Things Caches Do`: http://tomayko.com/writings/things-caches-do
 .. _`Cache Tutorial`: http://www.mnot.net/cache_docs/

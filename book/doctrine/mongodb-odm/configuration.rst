@@ -9,29 +9,71 @@ Configuration
 
     # app/config/config.yml
     doctrine_mongo_db:
-        server: mongodb://localhost:27017
+        connections:
+            default:
+                server: mongodb://localhost:27017
+                options:
+                    connect: true
         default_database: hello_%kernel.environment%
-        options:
-            connect: true
-        metadata_cache_driver: array # array, apc, xcache, memcache
+        document_managers:
+            default:
+                mappings:
+                    AcmeDemo: ~
+                metadata_cache_driver: array # array, apc, xcache, memcache
 
 If you wish to use memcache to cache your metadata, you need to configure the
-``Memcache`` instance you can do the following:
+``Memcache`` instance; for example, you can do the following:
 
-.. code-block:: yaml
+.. configuration-block::
 
-    # app/config/config.yml
-    doctrine_mongo_db:
-        server: mongodb://localhost:27017
-        default_database: hello_%kernel.environment%
-        options:
-            connect: true
-        metadata_cache_driver:
-            type: memcache
-            class: Doctrine\Common\Cache\MemcacheCache
-            host: localhost
-            port: 11211
-            instance_class: Memcache
+    .. code-block:: yaml
+
+        # app/config/config.yml
+        doctrine_mongo_db:
+            default_database: hello_%kernel.environment%
+            connections:
+                default:
+                    server: mongodb://localhost:27017
+                    options:
+                        connect: true
+            document_managers:
+                default:
+                    mappings:
+                        AcmeDemo: ~
+                    metadata_cache_driver:
+                        type: memcache
+                        class: Doctrine\Common\Cache\MemcacheCache
+                        host: localhost
+                        port: 11211
+                        instance_class: Memcache
+
+    .. code-block:: xml
+
+        <?xml version="1.0" ?>
+
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:doctrine_mongo_db="http://symfony.com/schema/dic/doctrine/odm/mongodb"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+                                http://symfony.com/schema/dic/doctrine/odm/mongodb http://symfony.com/schema/dic/doctrine/odm/mongodb/mongodb-1.0.xsd">
+
+            <doctrine_mongo_db:config default-database="hello_%kernel.environment%">
+                <doctrine_mongo_db:document-manager id="default">
+                    <doctrine_mongo_db:mapping name="AcmeDemo" />
+                    <doctrine_mongo_db:metadata-cache-driver type="memcache">
+                        <doctrine_mongo_db:class>Doctrine\Common\Cache\MemcacheCache</doctrine_mongo_db:class>
+                        <doctrine_mongo_db:host>localhost</doctrine_mongo_db:host>
+                        <doctrine_mongo_db:port>11211</doctrine_mongo_db:port>
+                        <doctrine_mongo_db:instance-class>Memcache</doctrine_mongo_db:instance-class>
+                    </doctrine_mongo_db:metadata-cache-driver>
+                </doctrine_mongo_db:document-manager>
+                <doctrine_mongo_db:connection id="default" server="mongodb://localhost:27017">
+                    <doctrine_mongo_db:options>
+                        <doctrine_mongo_db:connect>true</doctrine_mongo_db:connect>
+                    </doctrine_mongo_db:options>
+                </doctrine_mongo_db:connection>
+            </doctrine_mongo_db:config>
+        </container>
 
 Mapping Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -40,8 +82,8 @@ Explicit definition of all the mapped documents is the only necessary
 configuration for the ODM and there are several configuration options that you
 can control. The following configuration options exist for a mapping:
 
-- ``type`` One of "annotations", "xml", "yml", "php" or "static-php". This
-  specifies which type of metadata type your mapping uses.
+- ``type`` One of ``annotations``, ``xml``, ``yml``, ``php`` or ``staticphp``.
+  This specifies which type of metadata type your mapping uses.
 - ``dir`` Path to the mapping or entity files (depending on the driver). If
   this path is relative it is assumed to be relative to the bundle root. This
   only works if the name of your mapping is a bundle name. If you want to use
@@ -51,8 +93,8 @@ can control. The following configuration options exist for a mapping:
   share. This prefix should never conflict with prefixes of other defined
   mappings otherwise some of your documents cannot be found by Doctrine. This
   option defaults to the bundle namespace + ``Document``, for example for an
-  application bundle called "Hello" prefix would be
-  ``Sensio\Hello\Document``.
+  application bundle called ``AcmeHelloBundle``, the prefix would be
+  ``Acme\HelloBundle\Document``.
 - ``alias`` Doctrine offers a way to alias document namespaces to simpler,
   shorter names to be used in queries or for Repository access.
 - ``is_bundle`` This option is a derived value from ``dir`` and by default is
@@ -65,32 +107,34 @@ To avoid having to configure lots of information for your mappings you should
 follow these conventions:
 
 1. Put all your entities in a directory ``Document/`` inside your bundle. For
-   example ``Sensio/Hello/Document/``.
+   example ``Acme/HelloBundle/Document/``.
 2. If you are using xml, yml or php mapping put all your configuration files
    into the ``Resources/config/doctrine/metadata/doctrine/mongodb/`` directory
-   sufficed with dcm.xml, dcm.yml or dcm.php respectively.
+   suffixed with dcm.xml, dcm.yml or dcm.php respectively.
 3. Annotations is assumed if an ``Document/`` but no
-   ``Resources/config/doctrine/metadata/doctrine/mongodb/`` directory is found.
+   ``Resources/config/doctrine/metadata/mongodb/`` directory is found.
 
 The following configuration shows a bunch of mapping examples:
 
 .. code-block:: yaml
 
     doctrine_mongo_db:
-        mappings:
-            MyBundle1: ~
-            MyBundle2: yml
-            MyBundle3: { type: annotation, dir: Documents/ }
-            MyBundle4: { type: xml, dir: Resources/config/doctrine/mapping }
-            MyBundle5:
-                type: yml
-                dir: my-bundle-mappings-dir
-                alias: BundleAlias
-            doctrine_extensions:
-                type: xml
-                dir: %kernel.dir%/../src/vendor/DoctrineExtensions/lib/DoctrineExtensions/Documents
-                prefix: DoctrineExtensions\Documents\
-                alias: DExt
+        document_managers:
+            default:
+                mappings:
+                    MyBundle1: ~
+                    MyBundle2: yml
+                    MyBundle3: { type: annotation, dir: Documents/ }
+                    MyBundle4: { type: xml, dir: Resources/config/doctrine/mapping }
+                    MyBundle5:
+                        type: yml
+                        dir: my-bundle-mappings-dir
+                        alias: BundleAlias
+                    doctrine_extensions:
+                        type: xml
+                        dir: %kernel.dir%/../src/vendor/DoctrineExtensions/lib/DoctrineExtensions/Documents
+                        prefix: DoctrineExtensions\Documents\
+                        alias: DExt
 
 Registering Event Listeners and Subscribers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,28 +156,69 @@ Multiple Connections
 If you need multiple connections and document managers you can use the
 following syntax:
 
-.. code-block:: yaml
+.. configuration-block
 
-    doctrine_mongo_db:
-        default_database: hello_%kernel.environment%
-        default_connection: conn2
-        default_document_manager: dm2
-        metadata_cache_driver: apc
-        connections:
-            conn1:
-                server: mongodb://localhost:27017
-                options:
-                    connect: true
-            conn2:
-                server: mongodb://localhost:27017
-                options:
-                    connect: true
-        document_managers:
-            dm1:
-                connection: conn1
-                metadata_cache_driver: xcache
-            dm2:
-                connection: conn2
+    .. code-block:: yaml
+
+        doctrine_mongo_db:
+            default_database: hello_%kernel.environment%
+            default_connection: conn2
+            default_document_manager: dm2
+            metadata_cache_driver: apc
+            connections:
+                conn1:
+                    server: mongodb://localhost:27017
+                    options:
+                        connect: true
+                conn2:
+                    server: mongodb://localhost:27017
+                    options:
+                        connect: true
+            document_managers:
+                dm1:
+                    connection: conn1
+                    metadata_cache_driver: xcache
+                    mappings:
+                        AcmeDemo: ~
+                dm2:
+                    connection: conn2
+                    mappings:
+                        AcmeHello: ~
+
+    .. code-block:: xml
+
+        <?xml version="1.0" ?>
+
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:doctrine_mongo_db="http://symfony.com/schema/dic/doctrine/odm/mongodb"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+                                http://symfony.com/schema/dic/doctrine/odm/mongodb http://symfony.com/schema/dic/doctrine/odm/mongodb/mongodb-1.0.xsd">
+
+            <doctrine_mongo_db:config
+                    default-database="hello_%kernel.environment%"
+                    default-document-manager="dm2"
+                    default-connection="dm2"
+                    proxy-namespace="Proxies"
+                    auto-generate-proxy-classes="true">
+                <doctrine_mongo_db:connection id="conn1" server="mongodb://localhost:27017">
+                    <doctrine_mongo_db:options>
+                        <doctrine_mongo_db:connect>true</doctrine_mongo_db:connect>
+                    </doctrine_mongo_db:options>
+                </doctrine_mongo_db:connection>
+                <doctrine_mongo_db:connection id="conn2" server="mongodb://localhost:27017">
+                    <doctrine_mongo_db:options>
+                        <doctrine_mongo_db:connect>true</doctrine_mongo_db:connect>
+                    </doctrine_mongo_db:options>
+                </doctrine_mongo_db:connection>
+                <doctrine_mongo_db:document-manager id="dm1" metadata-cache-driver="xcache" connection="conn1">
+                    <doctrine_mongo_db:mapping name="AcmeDemo" />
+                </doctrine_mongo_db:document-manager>
+                <doctrine_mongo_db:document-manager id="dm2" connection="conn2">
+                    <doctrine_mongo_db:mapping name="AcmeHello" />
+                </doctrine_mongo_db:document-manager>
+            </doctrine_mongo_db:config>
+        </container>
 
 Now you can retrieve the configured services connection services::
 
@@ -146,75 +231,6 @@ connection services::
     $dm1 = $container->get('doctrine.odm.mongodb.dm1_document_manager');
     $dm2 = $container->get('doctrine.odm.mongodb.dm2_document_manager');
 
-XML
-~~~
-
-You can specify the same configuration via XML if you prefer that. Here are
-the same examples from above in XML.
-
-Simple Single Connection:
-
-.. code-block:: xml
-
-    <?xml version="1.0" ?>
-
-    <container xmlns="http://www.symfony-project.org/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:doctrine="http://www.symfony-project.org/schema/dic/doctrine/odm/mongodb"
-        xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd
-                            http://www.symfony-project.org/schema/dic/doctrine/odm/mongodb http://www.symfony-project.org/schema/dic/doctrine/odm/mongodb/mongodb-1.0.xsd">
-
-        <doctrine:mongodb server="mongodb://localhost:27017"
-                          default-database="hello_%kernel.environment%">
-            <metadata-cache-driver type="memcache">
-                <class>Doctrine\Common\Cache\MemcacheCache</class>
-                <host>localhost</host>
-                <port>11211</port>
-                <instance-class>Memcache</instance_class>
-            </metadata-cache-driver>
-            <options>
-                <connect>true</connect>
-            </options>
-        </doctrine:mongodb>
-    </container>
-
-Multiple Connections:
-
-.. code-block:: xml
-
-    <?xml version="1.0" ?>
-
-    <container xmlns="http://www.symfony-project.org/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:doctrine="http://www.symfony-project.org/schema/dic/doctrine/odm/mongodb"
-        xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd
-                            http://www.symfony-project.org/schema/dic/doctrine/odm/mongodb http://www.symfony-project.org/schema/dic/doctrine/odm/mongodb/mongodb-1.0.xsd">
-
-        <doctrine:mongodb default-database="hello_%kernel.environment%"
-                          metadata-cache-driver="apc"
-                          default-document-manager="dm2"
-                          default-connection="dm2"
-                          proxy-namespace="Proxies"
-                          auto-generate-proxy-classes="true">
-            <doctrine:connections>
-                <doctrine:connection id="conn1" server="mongodb://localhost:27017">
-                    <options>
-                        <connect>true</connect>
-                    </options>
-                </doctrine:connection>
-                <doctrine:connection id="conn2" server="mongodb://localhost:27017">
-                    <options>
-                        <connect>true</connect>
-                    </options>
-                </doctrine:connection>
-            </doctrine:connections>
-            <doctrine:document-managers>
-                <doctrine:document-manager id="dm1" server="mongodb://localhost:27017" metadata-cache-driver="xcache" connection="conn1" />
-                <doctrine:document-manager id="dm2" server="mongodb://localhost:27017" connection="conn2" />
-            </doctrine:document-managers>
-        </doctrine:mongodb>
-    </container>
-
 Writing Document Classes
 ------------------------
 
@@ -224,11 +240,13 @@ MongoDB ODM. You can provide the mapping information via xml, yaml or
 annotations. In this example, for simplicity and ease of reading we will use
 annotations.
 
-First, lets write a simple User class::
+First, let's write a simple User class.
 
-    // src/Sensio/HelloBundle/Document/User.php
+.. code-block:: php
 
-    namespace Sensio\HelloBundle\Document;
+    // src/Acme/HelloBundle/Document/User.php
+
+    namespace Acme\HelloBundle\Document;
 
     class User
     {
@@ -254,17 +272,23 @@ First, lets write a simple User class::
 This class can be used independent from any persistence layer as it is a
 regular PHP class and does not have any dependencies. Now we need to annotate
 the class so Doctrine can read the annotated mapping information from the doc
-blocks::
+blocks.
+
+.. code-block:: php-annotations
 
     // ...
 
     /** @mongodb:Document(collection="users") */
     class User
     {
-        /** @mongodb:Id */
+        /**
+         * @mongodb:Id
+         */
         protected $id;
 
-        /** @mongodb:String */
+        /**
+         * @mongodb:Field(type="string")
+         */
         protected $name;
 
         // ...
@@ -278,7 +302,9 @@ working with instances of that document persisting to and retrieving from
 MongoDB.
 
 From your controllers you can access the ``DocumentManager`` instance from the
-container::
+container.
+
+.. code-block:: php
 
     class UserController extends Controller
     {
@@ -295,14 +321,16 @@ container::
         }
     }
 
-Later you can retrieve the persisted document by its id::
+Later you can retrieve the persisted document by its id.
+
+.. code-block:: php
 
     class UserController extends Controller
     {
         public function editAction($id)
         {
             $dm = $this->get('doctrine.odm.mongodb.document_manager');
-            $user = $dm->find('HelloBundle:User', $id);
+            $user = $dm->find('AcmeHello:User', $id);
 
             // ...
         }
@@ -317,4 +345,4 @@ The MongoDB event tags are called "doctrine.odm.mongodb.default_event_listener" 
 MongoDB document manager.
 
 .. _MongoDB:       http://www.mongodb.org/
-.. _documentation: http://www.doctrine-project.org/projects/mongodb_odm/1.0/docs/en
+.. _documentation: http://www.doctrine-project.org/docs/mongodb_odm/1.0/en

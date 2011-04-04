@@ -1,30 +1,27 @@
 .. index::
    single: Symfony2 Fundamentals
 
-The HTTP Spec and Symfony2 Fundamentals
-=======================================
+Las Especificaciones de HTTP y los Fundamentos de Symfony2
+==========================================================
 
-To go far with Symfony2, we'll start first by discussing the Hypertext Transfer
-Protocol (HTTP) - the refreshingly simple message format used by all clients
-(e.g. web browsers) and servers when communicating with each other.
-This is important because, as we'll discover, Symfony2 has been tirelessly
-architected at its core to use HTTP - not reinvent it. The end product
-is a framework that, unlike many others, is an abstraction around the proven
-fundamental rules of the World Wide Web. Whether you realize it or not,
-HTTP is something you use everyday. With Symfony2, you'll learn how to
-leverage and master it.
+Para no adentrarnos mucho en Symfony2, iniciaremos discutiendo el  Protocolo de Transferencia de Hipertexto
+(HTTP) - el formato de un simple mensaje de actualizacion que es usado por todos los clientes (ejemplo los 
+navegadores web) y los servidores cuando se comunican unos con otros. Esto es importante porque, como 
+descubiremos mas adelante, Symfony2 has sido diseado enteramente para usar HTTP - no lo reinventamos.
+El producto final es un framework que, a diferencia de muchos otros, es una abstracion de los principios
+funtamentales de la World Wide Web. Ya sea que nos demos cuenta o no, el Protocolo de Hipertexto (HTTP) es
+algo que usamos a diario. Con Symfony2, aprenderemos a aprovecharlo y  dominarlo.
 
 .. index::
    single: HTTP; Request-response paradigm
 
-The Client sends the Request
-----------------------------
+El Cliente envia la Solicitud 
+-----------------------------
 
-The Web is built around the idea that every communication begins when a client
-makes a *request* to a server. The request is a simple text message created by
-the client in a special format known as HTTP. Though there are many different
-types of clients - web browser, web services, RSS reader, etc - each sends a
-request with the same basic format. For example:
+La Web esta contruida alrededor de la idea de que toda comunicacion empieza cuando un cliente realiza una
+"solicitud" a el servidor. La solicitud es un simple mensaje de texto creado por el cliente en un formato
+especial conocido como HTTP. A pesar de que hay diferentes tipos de clientes- navegadores web, servicios 
+web, lectores RSS, etc - cada uno de ellos envia una solicitud con el mismo formato basico. Por ejemplo:
 
 .. code-block:: text
 
@@ -33,24 +30,22 @@ request with the same basic format. For example:
     Accept: text/html
     User-Agent: Mozilla/5.0 (Linux; X11)
 
-The first line of an HTTP request is the most important one (and as a matter
-of fact, the only mandatory one). It contains two things: the URI and the
-HTTP method. The URI (URL if combined with the host header) uniquely identifies
-the location of the resource while the HTTP method defines what you want to
-*do* with the resource. In this example, that unique location of the resource
-is ``/index.html`` and the HTTP method is GET. In other words, the client's
-request is to retrieve the resource identified by ``/index.html``.
+La primera linea de una solicitud HTTP es la mas importante (de hecho es la unica obligatoria). Esta 
+contiene dos cosas/elementos la URI y el metodo HTTP. La URI (URL si esta combina con la cabezera del
+host) que identifica como unica la localizacion del recurso mientras el metodo HTTP define lo que deseas
+"hacer" con el recurso. En el ejemplo anterior, la localizacion del recurso es ``/index.html`` y el metodo
+es GET. En otras palabras, los clientes desean recibir el recurso identificado por ``/index.html``.
 
-The HTTP methods are the *verbs* of the HTTP request and define the few common
-ways that we can act upon the resource:
+Los metodos son los *verbos* de la solicitud HTTP y definen las posibles alternativas que  tienes para 
+interactuar con el recurso:
 
-* *GET*  Retrieve the resource from the server;
-* *POST* Create a resource on the server;
-* *PUT*  Update the resource on the server;
-* *DELETE* Delete the resource from the server.
+* *GET*  Recupera un recurso del servidor;
+* *POST* Crea un recurso en el servidor;
+* *PUT*  Actualiza un recurso en el servidor;
+* *DELETE* Eimina el recurso del servidor.
 
-With this in mind, we can imagine what an HTTP request might look like to
-delete a specific, say, a specific blog entry:
+Con esto es mente, te podrias imaginar que una solicitud HTTP para eliminar una entrada especifica de un blog
+luciria de la siguiente manera:
 
 .. code-block:: text
 
@@ -58,28 +53,23 @@ delete a specific, say, a specific blog entry:
 
 .. note::
 
-    There are actually nine HTTP methods defined by the HTTP specification,
-    but many of them are not widely used or supported. In reality, many modern
-    browsers don't support the ``PUT`` and ``DELETE`` methods. One additional
-    header that *is* commonly supported is the ``HEAD`` method, which asks
-    for the response of an identical GET request, but without the response
-    body.
+    En la actualidad hay nueve metodos HTTP definidos en la especificaciones de HTTP, pero muchos de ellos no
+    son usados o soportados. En la realidad, algunos navegadores web modernos no soportan los metodos ``PUT`` 
+    y ``DELETE``. Un metodo adicional que es comunmente soportado es el metodo  ``HEAD``, que pide para la 
+    respuesta una solicitud identica al metodo GET, pero sin el cuerpo de respuesta.
 
-In addition to the first line, an HTTP request commonly contains other lines
-of information known as HTTP request headers. The headers can supply a wide
-array of additional information such as the requested ``Host``, the response
-formats the client accepts (``Accept``) and the application the client is
-using to make the request (``User-Agent``). Many other headers exist and
-can be found on Wikipedia's `List of HTTP header fields`_ article.
+En conjunto a esta primera linea, una solicitud HTTP generalmente contiene otras lineas de informacion conocidas
+como cabeceras de la solicitud HTTP. Estas cabeceras pueden suministrar informacion adicional como el ``Host`` 
+solicitado, el formato de respuesta que acepta el cliente (``Accept``) y la aplicacion que el cliente esta usando
+para realizar la solicitud (``User-Agent``). Muchas otras cabeceras pueden existir y puedes encontrarlas en Wikipedia
+en el articulo `List of HTTP header fields`.
 
-The Server returns the Response
--------------------------------
+El Servidor devuelve una Respuesta
+----------------------------------
 
-Now that the server has read the HTTP-formatted request from the client, it
-knows exactly which resource the client has identified (the URI) and what
-the client would like to do with that resource (HTTP method). In the case
-of a GET request, the server prepares the resource and returns it as an HTTP
-response:
+Luego de que el servidor ha leido la solicitud HTTP del cliente, este conoce exactamente cual recurso el cliente
+ha identificado (la URI)  y lo que el cliente desea hacer hacer con el mismo (metodo HTTP). En el caso, de una
+solicitud GET, el servidor prepara el recurso y lo devuelve como una respuesta HTTP:
 
 .. code-block:: text
 
@@ -92,34 +82,36 @@ response:
 
     <html><body>Hello Symfony2 World!</body></html>
 
-The HTTP response returned by the server to the client contains not only
-the requested resource (the HTML content in this case), but also other information
-about the response. Like the HTTP request, the first line of the response
-is especially important and contains the HTTP response status code (200 in
-this case). The status code is extremely important and communicates the overall
-outcome of the request back to the client. Different status codes exist for
-successful requests, failed requests, and requests that require action from
-the client (e.g. a redirect). A full list can be found on Wikipedia's
-`List of HTTP status codes`_ article.
+La respuesta HTTP devuelta por el servidor a el ciente no contiene solo
+el recurso solicitado (el cotenido HTML en este caso), sino que ademas contiene informacion adicional
+relacionada con el recurso. Como la solicitud HTTP, la primera linea de la respuesta
+es la mas importante y contiene un codigo relacionado con el estatus de la respuesta HTTP (200 en
+este caso). El codigo de estatus es muy importante ya que  informa al cliente el resultado de su 
+solicitud. Existen diferentes codigos de estatus HTTP para informar de las solicitudes exitosas, fallidas, 
+y ademas de las solicitudes que requieren intervencion por parte del cliente (ejemplo: una redireccion).
+Una lista completa de estos codigos de estatus puedes encontrarlo en el articulo de Wikipedia 
+`List of HTTP status codes`.
 
-Also like the request, an HTTP response message may contain additional pieces
-of information. These are known as HTTP headers and sit between the first line
-(the status code) and the response content.
+Como la solicitud, un mensaje de respuesta HTTP podria contener puiezas adicionales
+de informacion. Estos son conocidos como cabeceras HTTP y se encuentran ubicadas entre la primera linea
+(el codigo de estatus) y el contenido de la respuesta.
 
-One important HTTP response header is the ``Content-Type``. The body of the
-same resource may be returned in multiple different formats including HTML,
-XML, or JSON to name a few. The ``Content-Type`` header tells the client
-which format is being returned.
+Una de las cabeceras de respuesta HTTP mas importante es la de ``Content-Type``. El cuerpo del 
+recurso puede ser devuelto en multiples y diferentes formatos incluyendo HTML,
+XML, or JSON por nombrar algunos. La cabecera ``Content-Type`` le indica al cliente el formato en el
+que sera devuelta la respuesta.
 
-As we'll find out, many other headers exist. Many are very powerful and can
-be used, for example, to manage a powerful caching system.
+Como ya visto, existen otras cabeceras. Muchas de ellas son realmente funcionales y pueden
+ser usadas, por ejemplo, para manejar/contruir y poderoso sistema de cache.
 
 HTTP and Client-Server Communication
 ------------------------------------
 
 This request-response exchange is the fundamental process that drives all
 communication on the World Wide Web. And as important and powerful as this
-process is, it's inescapably simple. In fact, the rapid client-server communication
+process is, it's inescapably simple. In fact, the rapid client-server communicationwhich asks
+    for the response of an identical GET request, but without the response
+    body.
 mirrors the way in which we send and receive email messages everyday. HTTP
 is simply a commonly-understood language for these messages so that a disparate
 set of applications and machines can communicate.
@@ -148,7 +140,9 @@ Requests and Responses in Symfony
 PHP comes packaged with an array of variables and methods that allow the developer
 to understand each request and send a response. For request information,
 PHP prepares superglobal variables such as ``$_SERVER`` and ``$_GET``.
-Recall that each raw request is simply an HTTP-formatted block of text.
+Recall that each raw request is simply an HTTP-formatted block of text.which asks
+    for the response of an identical GET request, but without the response
+    body.
 The transformation of the request message into the superglobal variables
 is done behind the scenes by PHP and your web server. The end result is that
 the request message information is now available in PHP, but as a scattered
@@ -188,7 +182,9 @@ that case::
 Symfony also provides a ``Response`` class, which is simply a PHP abstraction
 of the raw HTTP response message. This allows your application to use an
 object-oriented interface to construct response that needs to be returned
-to the client::
+to the client::which asks
+    for the response of an identical GET request, but without the response
+    body.
 
     use Symfony\Component\HttpFoundation\Response;
     $response = new Response();

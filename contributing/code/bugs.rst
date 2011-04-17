@@ -1,37 +1,38 @@
-Reporting a Bug
-===============
+Informar un error
+=================
 
-Whenever you find a bug in Symfony2, we kindly ask you to report it. It helps
-us make a better Symfony2.
+Si encuentras un error en Symfony2, te rogamos que lo informes. Esto nos ayuda
+a hacer Symfony2 mejor.
 
-.. caution::
+.. precaución::
 
-    If you think you've found a security issue, please use the special
-    :doc:`procedure <security>` instead.
+    Si piensas que has encontrado un problema de seguridad, por favor usa en su
+    lugar el :doc:`procedimiento <security>` específico.
 
-Before submitting a bug:
+Antes de enviar un error:
 
- * Double-check the official `documentation`_ to see if you're not misusing the
-   framework;
+ * Comprueba minuciosamente la `documentación`_ oficial para ver si no estas
+   empleando mal el framework;
 
- * Ask assistance on the `users mailing-list`_, the `forum`_, or on the
-   #symfony `IRC channel`_ if you're not sure if your issue is really a bug.
+ * Pide ayuda en la `lista de correo de usuarios`_, el `foro`_, o en el
+   `canal IRC`_ #symfony si no estas seguro de que el problema sea realmente un
+   error.
 
-If your problem definitely looks like a bug, report it using the official bug
-`tracker`_ and follow some basic rules:
+Si tu problema parece definitivamente un error, infórmalo usando el `seguidor`_
+de errores oficial y sigue algunas reglas básicas:
 
- * Use the title field to clearly describe the issue;
+ * Usa el campo título para describir con claridad el problema;
 
- * Describe the steps needed to reproduce the bug with short code examples
-   (providing a unit test that illustrates the bug is better);
+ * Describe los pasos necesarios para reproducir el error con pequeños ejemplos
+   de código (proveer una prueba unitaria que ilustra el error es mejor);
 
- * Give as much details as possible about your environment (OS, PHP version,
-   Symfony version, enabled extensions, ...);
+ * Da tantos detalles como sea posible sobre tu entorno (SO, versión de PHP,
+   versión de Symfony, extensiones habilitadas, ...);
 
- * *(optional)* Attach a :doc:`patch <patches>`.
+ * *(opcional)* Adjunta un :doc:`parche <patches>`.
 
-.. _documentation: http://symfony.com/doc/2.0/
-.. _users mailing-list: http://groups.google.com/group/symfony-users
-.. _forum: http://forum.symfony-project.org/
-.. _IRC channel: irc://irc.freenode.net/symfony
-.. _tracker: http://trac.symfony-project.org/
+.. _documentación: http://symfony.com/doc/2.0/
+.. _lista de correo de usuarios: http://groups.google.com/group/symfony-users
+.. _foro: http://forum.symfony-project.org/
+.. _canal IRC: irc://irc.freenode.net/symfony
+.. _seguidor: http://trac.symfony-project.org/

@@ -103,11 +103,11 @@ book/validator/constraints/Valid.rst
 book/validator/index.rst
 book/validator/overview.rst
 book/validator/validation.rst
-contributing/code/bugs.rst
+contributing/code/bugs.rst                       sergiovier        12/04/2011          100%
 contributing/code/conventions.rst
 contributing/code/index.rst
 contributing/code/license.rst
-contributing/code/patches.rst
+contributing/code/patches.rst                    sergiovier        14/04/2011          30%
 contributing/code/security.rst
 contributing/code/standards.rst
 contributing/code/tests.rst

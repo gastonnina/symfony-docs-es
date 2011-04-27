@@ -1,155 +1,158 @@
-Submitting a Patch
-==================
+Enviar un Parche
+================
 
-Patches are the best way to provide a bug fix or to propose enhancements to
-Symfony2.
+Los parches son la mejor manera de proveer una corrección a un error o
+proponer mejoas a Symfony2.
 
-Initial Setup
--------------
+Configuración Inicial
+---------------------
 
-Before working on Symfony2, setup a friendly environment with the following
-software:
+Antes de trabajar en Symfony2, configura un entorno amigable con los
+siguientes programas:
 
 * Git;
 
-* PHP version 5.3.2 or above;
+* PHP versión 5.3.2 o superior;
 
-* PHPUnit 3.5.11 or above.
+* PHPUnit 3.5.11 o superior.
 
-Set up your user information with your real name and a working email address:
+Establece tu información de usuario con tu nombre real y tu una dirección
+de correo electrónico de trabajo:
 
 .. code-block:: bash
 
-    $ git config --global user.name "Your Name"
-    $ git config --global user.email you@example.com
+    $ git config --global user.name "Tu Nombre"
+    $ git config --global user.email tu.email@ejemplo.com
 
 .. tip::
 
-    If you are new to Git, we highly recommend you to read the excellent and
-    free `ProGit`_ book.
+    Si eres nuevo en Git, te recomendamos que leas el libro exelente y
+    gratuito `ProGit`_.
 
-Get the Symfony2 source code:
+Obtener el código fuente de Symfony2:
 
-* Create a `GitHub`_ account and sign in;
+* Crea una cuenta `GitHub`_ e ingresa;
 
-* Fork the `Symfony2 repository`_ (click on the "Fork" button);
+* Has una copia del `repositorio de Symfony2`_ (click en el boton "Copiar");
 
-* After the "hardcore forking action" has completed, clone your fork locally
-  (this will create a `symfony` directory):
+* Después que la "acción de copiado duro" se ha completado, clona
+  tu copia localmente (esto creará un directorio `symfony`):
 
 .. code-block:: bash
 
-      $ git clone git@github.com:USERNAME/symfony.git
+      $ git clone git@github.com:TU-NOMBRE/symfony.git
 
-* Add the upstream repository as ``remote``:
+* Agrega el repositorio principal como ``remote``:
 
 .. code-block:: bash
 
       $ cd symfony
       $ git remote add upstream git://github.com/symfony/symfony.git
 
-Now that Symfony2 is installed, check that all unit tests pass for your
-environment as explained in the dedicated :doc:`document <tests>`.
+Ahora que Symfony2 está instalado, comprueba que todas las pruebas unitarias
+se ejecutan con éxito para tu entorno, como se explica en el
+:doc:`documento <tests>` dedicado.
 
-Working on a Patch
-------------------
+Trabajar en un Parche
+---------------------
 
-Each time you want to work on a patch for a bug or on an enhancement, create a
-topic branch:
+Cada vez que desees trabajar en un parche para un error o una mejora, crea una
+rama del tema:
 
 .. code-block:: bash
 
-    $ git checkout -b BRANCH_NAME
+    $ git checkout -b NOMBRE_DE_RAMA
 
 .. tip::
 
-    Use a descriptive name for your branch (`ticket_XXX` where `XXX` is the
-    ticket number is a good convention for bug fixes).
+    Usa un nombre descriptivo para tu rama (`ticket_XXX` en donde `XXX` es el
+    número del ticket, es una buena convención para corrección de errores).
 
-The above command automatically switches the code to the newly created branch
-(check the branch you are working on with `git branch`).
+El comando anterior cambia automaticamente el código a la rama recientemente
+creada (comprueba la rama en la que estas trabajando con `git branch`).
 
-Work on the code as much as you want and commit as much as you want; but keep
-in mind the following:
+Trabaja en el código tanto como desees y has tantos commits como desees; pero
+mantén en mente lo siguiente:
 
-* Follow the coding :doc:`standards <standards>` (use `git diff --check` to
-  check for trailing spaces);
+* Sigue los :doc:`estándares <standards>` de código (usa `git diff --check`
+  para verifcar los espacios finales);
 
-* Add unit tests to prove that the bug is fixed or that the new feature
-  actually works;
+* Agrega pruebas unitarias para demostrar que el error está corregido o que la
+  nueva característica realmente funciona;
 
-* Do atomic and logically separate commits (use the power of `git rebase` to
-  have a clean and logical history);
+* Has commits separados logica y atómicamente (usa el poder de `git rebase`
+  para tener un historial limpio y lógico);
 
-* Write good commit messages.
+* Escribe buenos mensajes de commit.
 
 .. tip::
 
-    A good commit message is composed of a summary (the first line),
-    optionally followed by a blank line and a more detailed description. The
-    summary should start with the Component you are working on in square
-    brackets (``[DependencyInjection]``, ``[FrameworkBundle]``, ...). Use a
-    verb (``fixed ...``, ``added ...``, ...) to start the summary and don't
-    add a period at the end.
+    Un buen mensaje de commit está compuesto de un sumario (la primera línea),
+    seguido opcionalmente por una línea en blanco y una descripción más
+    detallada. El sumario debería comenzar con el Componente en el que estas
+    trabajando, señalado en corchetes (``[DependencyInjection]``,
+    ``[FrameworkBundle]``, ...). Usa un verbo (``fixed ...``, ``added ...``,
+    ...) para iniciar el sumario y no agregues un punto al final.
 
-Submitting a Patch
-------------------
+Enviar un Parche
+----------------
 
-Before submitting your patch, update your branch (needed if it takes you a
-while to finish your changes):
+Antes de enviar tu parche, actualiza tu rama (es necesario si te toma un tiempo
+mientras terminas tus cambios):
 
 .. code-block:: bash
 
     $ git checkout master
     $ git fetch upstream
     $ git merge upstream/master
-    $ git checkout BRANCH_NAME
+    $ git checkout NOMBRE_RAMA
     $ git rebase master
 
-When doing the `rebase` command, you might have to fix merge conflicts. `git
-st` gives you the *unmerged* files. Resolve all conflicts, then continue the
-rebase:
+Cuando se ejecuta el comando `rebase`, es posible que tengas que corregir y
+combinar conflictos. `git st` indica los archivos *sin combinar*. Resuelve
+todos los conflictos y continúa con el `rebase`:
 
 .. code-block:: bash
 
-    $ git add ... # add resolved files
+    $ git add ... # agrega los archivos resueltos
     $ git rebase --continue
 
-Check that all tests still pass and push your branch remotely:
+Verifica que todos las pruebas siguen ejecutandose existosamente y empuja tu
+rama remotamente:
 
 .. code-block:: bash
 
-    $ git push origin BRANCH_NAME
+    $ git push origin NOMBRE_RAMA
 
-You can now discuss your patch on the `dev mailing-list`_ or make a pull
-request (they must be done on the ``symfony/symfony`` repository). To ease the
-core team work, always include the modified components in your pull request
-message, like in:
+Ahora puedes discutir tu parche en la `lista de correos dev`_ o envía una
+solicitud (debe estar hecho sobre el repositorio ``symfony/symfony``). Para
+facilitar el trabajo del equipo principal, incluye siempre el nombre de los
+componentes modificados en tu solicitud, como en:
 
 .. code-block:: text
 
-    [Yaml] foo bar
-    [Form] [Validator] [FrameworkBundle] foo bar
+    [Yaml] un cambio
+    [Form] [Validator] [FrameworkBundle] otro cambio
 
-If you are going to send an email to the mailing-list, don't forget to
-reference you branch URL (``https://github.com/USERNAME/symfony.git
-BRANCH_NAME``) or the pull request URL.
+Si envías un email a la lista de correo, no olvides referenciar a la url de tu
+rama (``https://github.com/NOMBRE_USUARIO/symfony.git NOMBRE_RAMA``) o la url de la
+solicitud.
 
-Based on the feedback from the mailing-list or via the pull request on GitHub,
-you might need to rework your patch. Before re-submitting the patch, rebase
-with master, don't merge; and force the push to the origin:
+Basado en la retroalimentación de la lista de correos o a travéz de la solititud
+en GitHub, es posible que necesites reveer tu parche. Antes de reenviar el parche,
+reajusta con `master`, sin combinar; y obliga el empuje a `origin`:
 
 .. code-block:: bash
 
     $ git rebase -f upstream/master
-    $ git push -f origin BRANCH_NAME
+    $ git push -f origin NOMBRE_RAMA
 
 .. note::
 
-    All patches you are going to submit must be released under the MIT
-    license, unless explicitly specified in the code.
+    Todos los parches que envíes deben ser publicados bajo la licencia MIT, a
+    menos que sea explícitamente indicado en el código.
 
-.. _ProGit:              http://progit.org/
-.. _GitHub:              https://github.com/signup/free
-.. _Symfony2 repository: https://github.com/symfony/symfony
-.. _dev mailing-list:    http://groups.google.com/group/symfony-devs
+.. _ProGit:               http://progit.org/
+.. _GitHub:               https://github.com/signup/free
+.. _repositorio Symfony2: https://github.com/symfony/symfony
+.. _lista de correos dev: http://groups.google.com/group/symfony-devs

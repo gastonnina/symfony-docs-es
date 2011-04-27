@@ -107,8 +107,8 @@ contributing/code/bugs.rst                       sergiovier        12/04/2011   
 contributing/code/conventions.rst
 contributing/code/index.rst
 contributing/code/license.rst
-contributing/code/patches.rst                    sergiovier        14/04/2011          30%
-contributing/code/security.rst
+contributing/code/patches.rst                    sergiovier        14/04/2011          100%
+contributing/code/security.rst                   sergiovier        16/04/2011          0%
 contributing/code/standards.rst
 contributing/code/tests.rst
 contributing/community/index.rst

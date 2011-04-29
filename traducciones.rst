@@ -104,12 +104,12 @@ book/validator/index.rst
 book/validator/overview.rst
 book/validator/validation.rst
 contributing/code/bugs.rst                       sergiovier        12/04/2011          100%
-contributing/code/conventions.rst
-contributing/code/index.rst
-contributing/code/license.rst
+contributing/code/conventions.rst                sergiovier        18/04/2011          100%
+contributing/code/index.rst                      sergiovier        12/04/2011          100%
+contributing/code/license.rst                    sergiovier        18/04/2011          100%
 contributing/code/patches.rst                    sergiovier        14/04/2011          100%
-contributing/code/security.rst                   sergiovier        16/04/2011          0%
-contributing/code/standards.rst
+contributing/code/security.rst                   sergiovier        16/04/2011          100%
+contributing/code/standards.rst                  sergiovier        18/04/2011          100%
 contributing/code/tests.rst
 contributing/community/index.rst
 contributing/community/irc.rst

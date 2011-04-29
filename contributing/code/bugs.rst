@@ -24,7 +24,7 @@ de errores oficial y sigue algunas reglas básicas:
  * Usa el campo título para describir con claridad el problema;
 
  * Describe los pasos necesarios para reproducir el error con pequeños ejemplos
-   de código (proveer una prueba unitaria que ilustra el error es mejor);
+   de código (proveer una prueba unitaria que ilustra el error es lo mejor);
 
  * Da tantos detalles como sea posible sobre tu entorno (SO, versión de PHP,
    versión de Symfony, extensiones habilitadas, ...);

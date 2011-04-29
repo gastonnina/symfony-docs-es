@@ -1,17 +1,18 @@
-Conventions
-===========
+Convenciones
+============
 
-The :doc:`standards` document describes the coding standards for the Symfony2
-projects and the internal and third-party bundles. This document describes
-coding standards and conventions used in the core framework to make it more
-consistent and predictable. You can follow them in your own code, but you
-don't need to.
+The :doc:`standards` describe el estándar de codificación para el proyecto
+Symfony2 y los paquetes internos y de terceras partes. Este documento describe
+los estándares de codificación y las convenciones utilizadas en el framework
+principal para hacerlo más consistente y predictible. Puedes seguir éstos
+estándares en tu propio código, aunque ello no es nesesario.
 
-Method Names
-------------
+Nombre de los Métodos
+---------------------
 
-When an object has a "main" many relation with related "things"
-(objects, parameters, ...), the method names are normalized:
+Cuando un objeto tiene una relación "principal" múltiple con "cosas"
+relacionadas (objetos, parámetros, ...), los nombres de los métodos son
+normalizados:
 
   * ``get()``
   * ``set()``
@@ -26,33 +27,34 @@ When an object has a "main" many relation with related "things"
   * ``count()``
   * ``keys()``
 
-The usage of these methods are only allowed when it is clear that there
-is a main relation:
+La utilización de éstos métodos esta permitido únicamente cuando está claro
+que existe una relacion principal:
 
-* a ``CookieJar`` has many ``Cookie`` objects;
+* un ``Tarro de Galletita`` tiene muchos objetos ``Galletita``;
 
-* a Service ``Container`` has many services and many parameters (as services
-  is the main relation, we use the naming convention for this relation);
+* un ``Contenedor`` de Servicios tiene muchos servicios y muchos parámetros
+  (como servicios es la relación principal, utilizamos la convención de nombres
+  para esta relación);
 
-* a Console ``Input`` has many arguments and many options. There is no "main"
-  relation, and so the naming convention does not apply.
+* una ``Entrada`` de Consola tiene muchos argumentos y muchas opciones. No
+  existe una relación principal, y por ello la convención de nombres no aplica.
 
-For many relations where the convention does not apply, the following methods
-must be used instead (where ``XXX`` is the name of the related thing):
+Para muchas relaciones donde la convención de nombres no aplica, los siguientes
+métodos deben ser utlizados (donde ``XXX`` es el nombre de la cosa relacionada):
 
-============== =================
-Main Relation  Other Relations
-============== =================
-``get()``      ``getXXX()``
-``set()``      ``setXXX()``
-``has()``      ``hasXXX()``
-``all()``      ``getXXXs()``
-``replace()``  ``setXXXs()``
-``remove()``   ``removeXXX()``
-``clear()``    ``clearXXX()``
-``isEmpty()``  ``isEmptyXXX()``
-``add()``      ``addXXX()``
-``register()`` ``registerXXX()``
-``count()``    ``countXXX()``
-``keys()``     n/a
-============== =================
+================== =================
+Relación Principal  Otras Relaciones
+================== =================
+``get()``          ``getXXX()``
+``set()``          ``setXXX()``
+``has()``          ``hasXXX()``
+``all()``          ``getXXXs()``
+``replace()``      ``setXXXs()``
+``remove()``       ``removeXXX()``
+``clear()``        ``clearXXX()``
+``isEmpty()``      ``isEmptyXXX()``
+``add()``          ``addXXX()``
+``register()``     ``registerXXX()``
+``count()``        ``countXXX()``
+``keys()``         n/a
+================== =================

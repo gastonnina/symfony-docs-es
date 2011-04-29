@@ -10,8 +10,7 @@ legibles y concisas, haciéndolas también más amigables para los diseñadores 
 .. note::
 
     En la lugar de Tiwig, también puedes usar :doc:`PHP </cookbook/templating/PHP>` 
-    para tus plantillas. Ambos motores son soportados por Symfony2 y tienen el 
-    mismo nivel de soporte.
+    para tus plantillas. Ambos motores son soportados por Symfony2.
 
 Un vistazo rápido a Twig
 ----------------------
@@ -126,38 +125,15 @@ Demos una mirada a nuestro layout ``layout.html.twig``:
 .. code-block:: jinja
 
     {# src/Acme/DemoBundle/Resources/views/layout.html.twig #}
-    {% extends "::base.html.twig" %}
+    <div class="symfony-content">
+        {% block content %}
+        {% endblock %}
+    </div>
 
-    {% block body %}
-        <h1>Demo Bundle</h1>
-
-        {% block content %}{% endblock %}
-    {% endblock %}
-
-La etiqueta ``{% block %}`` define dos bloques(``body`` y ``content``) para que los hijos 
-lo puedan sobrescribir. Todo lo que hace esta etiqueta de tipo bloque es decirle al motor 
-de plantillas que un hijo puede sobrescribir esa sección. La plantilla 
-``hello.html.twig`` sobrescribe el bloque con nombre ``content``. El otro está definido en 
-el layout ya que la propia plantilla se encuentra decorada por otra.. Cuando la parte 
-del bundle del nombre del template está vacía (``::base.html.twig``), las vistas son buscadas 
-dentro de la carpeta ``app/Resources/``. Esta carpeta almacena vistas globales para el proyecto completo.
-
-.. code-block:: jinja
-
-    {# app/Resources/views/base.html.twig #}
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title>{% block title %}Welcome!{% endblock %}</title>
-            {% block stylesheets %}{% endblock %}
-            <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
-        </head>
-        <body>
-            {% block body %}{% endblock %}
-            {% block javascripts %}{% endblock %}
-        </body>
-    </html>
+Las etiquetas {% block %} definen bloques para que los hijos lo puedan sobrescribir. Lo 
+único que hace esta etiqueta es decirle al motor de plantillas que una 
+plantilla hija puede sobrescribir esa sección. La plantilla ``hello.html.twig`` sobrescribe al
+bloque ``content``.
 
 Usar Etiquetas, Filtros y Funciones
 ----------------------------
@@ -187,8 +163,8 @@ And change the ``index.html.twig`` template to include it:
     {% extends "AcmeDemoBundle::layout.html.twig" %}
 
     {# override the body block from embedded.html.twig #}
-    {% block body %}
-        {% include "AcmeDemoBundle:Hello:embedded.html.twig" %}
+    {% block content %}
+        {% include "AcmeDemoBundle:Demo:embedded.html.twig" %}
     {% endblock %}
 
 Incluir otros controladores
@@ -203,7 +179,7 @@ plantilla ``index``, para esto, puedes usar la etiqueta ``render``:
 
 .. code-block:: jinja
 
-    {# src/Acme/DemoBundle/Resources/views/Hello/index.html.twig #}
+    {# src/Acme/DemoBundle/Resources/views/Demo/index.html.twig #}
     {% render "AcmeDemoBundle:Demo:fancy" with { 'name': name, 'color': 'green' } %}
 
 La cadena ``AcmeDemoBundle:Demo:fancy`` hace referencia a la acción ``fancy``

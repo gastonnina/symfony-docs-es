@@ -1,4 +1,4 @@
-Contributing Code
+Contribuir Código
 =================
 
 .. toctree::

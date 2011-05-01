@@ -1,23 +1,24 @@
-When Flat PHP meets Symfony
+PHP plano conoce a Symfony2
 ===========================
 
-**Why is Symfony2 better than just opening up a file and writing flat PHP?**
+**¿Por qué Symfony2 es mejor que simplemente abrir un archivo y escribir PHP
+plano?**
 
-If you've never used a PHP framework, aren't familiar with the MVC philosophy,
-or just wonder what all the *hype* is around Symfony2, this chapter is for
-you. Instead of *telling* you that Symfony2 allows you to develop faster and
-better software than with flat PHP, you'll see for yourself.
+Si nunca ha usado un framework PHP, no está familiarizado con la filosofía MVC,
+o solamente se pregunta el porqué de la *exitación* alrededor de Symfony2, este
+capítulo es para usted. En lugar de *decirle* que Symfony2 le permite
+desarrollar software más rápido y mejor que con PHP plano, lo verá usted mismo.
 
-In this chapter, you'll write a simple application in flat PHP, and then
-refactor it to be more organized. You'll travel through time, seeing the
-decisions behind why web development has evolved over the past several years
-to where it is now. 
+En este capítulo, usted escribirá una simple aplicación en PHP plano, y luego la
+refactorizará para estar mejor ordenada. Viajará a través del tiempo, observando
+las decisiones detras de por qué el desarrollo web a evolucionado durante los
+últimos siete años a su estado actual.
 
-By the end, you'll see how Symfony2 can rescue you from mundane tasks and
-let you take back control of your code.
+Cuando terminé, verá como Symfony2 puede rescatarlo de las tareas mundanas y le
+deja retomar el contról de su código.
 
-A simple Blog in flat PHP
--------------------------
+Un simple Blog en PHP plano
+---------------------------
 
 In this chapter, you'll build the token blog application using only flat PHP.
 To begin, create a single page that displays blog entries that have been

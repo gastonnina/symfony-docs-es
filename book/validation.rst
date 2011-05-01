@@ -145,7 +145,7 @@ a template and passing in the ``$errorList`` variable:
 .. code-block:: php
 
     if (count($errorList) > 0) {
-        return $this->render('AcmeBlog:Author:validate.html.twig', array(
+        return $this->render('AcmeBlogBundle:Author:validate.html.twig', array(
             'errorList' => $errorList,
         ));
     } else {
@@ -201,10 +201,10 @@ objects that can then be displayed with your form:
         // process the Author object
     } else {
         // render the template with the errors
-        $this->render('AcmeBlog:Author:form.html.twig', array('form' => $form));
+        $this->render('BlogBundle:Author:form.html.twig', array('form' => $form));
     }
 
-For more information, see the :doc:`Forms</book/forms/overview>` chapter.
+For more information, see the :doc:`Forms</book/forms>` chapter.
 
 .. index::
    pair: Validation; Configuration
@@ -212,7 +212,7 @@ For more information, see the :doc:`Forms</book/forms/overview>` chapter.
 Configuration
 -------------
 
-To use the Symfony2 validator, ensure that it's enable in your application
+To use the Symfony2 validator, ensure that it's enabled in your application
 configuration:
 
 .. configuration-block::
@@ -222,7 +222,6 @@ configuration:
         # hello/config/config.yml
         framework:
             validation: { enabled: true, annotations: true }
-
 
     .. code-block:: xml
 

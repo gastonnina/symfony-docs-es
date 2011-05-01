@@ -126,6 +126,7 @@ the configuration for the development environment:
         web_profiler:
             toolbar: true
             intercept_redirects: true
+            verbose: true
 
     .. code-block:: xml
 
@@ -141,6 +142,7 @@ the configuration for the development environment:
         <webprofiler:config
             toolbar="true"
             intercept-redirects="true"
+            verbose="true"
         />
 
     .. code-block:: php
@@ -154,6 +156,7 @@ the configuration for the development environment:
         $container->loadFromExtension('web_profiler', array(
             'toolbar' => true,
             'intercept-redirects' => true,
+            'verbose' => true,
         ));
 
 When ``only-exceptions`` is set to ``true``, the profiler only collects data
@@ -163,6 +166,10 @@ When ``intercept-redirects`` is set to ``true``, the web profiler intercepts
 the redirects and gives you the opportunity to look at the collected data
 before following the redirect.
 
+When ``verbose`` is set to ``true``, the Web Debug Toolbar displays a lot of
+information. Setting ``verbose`` to ``false`` hides some secondary information
+to make the toolbar shorter.
+
 If you enable the web profiler, you also need to mount the profiler routes:
 
 .. configuration-block::
@@ -170,16 +177,16 @@ If you enable the web profiler, you also need to mount the profiler routes:
     .. code-block:: yaml
 
         _profiler:
-            resource: @WebProfiler/Resources/config/routing/profiler.xml
+            resource: @WebProfilerBundle/Resources/config/routing/profiler.xml
             prefix:   /_profiler
 
     .. code-block:: xml
 
-        <import resource="@WebProfiler/Resources/config/routing/profiler.xml" prefix="/_profiler" />
+        <import resource="@WebProfilerBundle/Resources/config/routing/profiler.xml" prefix="/_profiler" />
 
     .. code-block:: php
 
-        $collection->addCollection($loader->import("@WebProfiler/Resources/config/routing/profiler.xml"), '/_profiler');
+        $collection->addCollection($loader->import("@WebProfilerBundle/Resources/config/routing/profiler.xml"), '/_profiler');
 
 As the profiler adds some overhead, you might want to enable it only under
 certain circumstances in the production environment. The ``only-exceptions``

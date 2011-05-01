@@ -273,7 +273,7 @@ Symfony2 looks for message files (i.e. translations) in two locations:
   live in the ``Resources/translations/`` directory of the bundle;
 
 * To override any bundle translations, place message files in the
-  ``app/translations`` directory.
+  ``app/Resources/translations`` directory.
 
 The filename of the translations is also important as Symfony2 uses a convention
 to determine details about the translations. Each message file must be named
@@ -536,14 +536,14 @@ by the routing system using the special ``_locale`` parameter:
 
         contact:
             pattern:   /{_locale}/contact
-            defaults:  { _controller: AcmeDemo:Contact:index, _locale: en }
+            defaults:  { _controller: AcmeDemoBundle:Contact:index, _locale: en }
             requirements:
                 _locale: en|fr|de
 
     .. code-block:: xml
 
         <route id="contact" pattern="/{_locale}/contact">
-            <default key="_controller">AcmeDemo:Contact:index</default>
+            <default key="_controller">AcmeDemoBundle:Contact:index</default>
             <default key="_locale">en</default>
             <requirement key="_locale">en|fr|de</requirement>
         </route>
@@ -555,7 +555,7 @@ by the routing system using the special ``_locale`` parameter:
 
         $collection = new RouteCollection();
         $collection->add('contact', new Route('/{_locale}/contact', array(
-            '_controller' => 'AcmeDemo:Contact:index',
+            '_controller' => 'AcmeDemoBundle:Contact:index',
             '_locale'     => 'en',
         ), array(
             '_locale'     => 'en|fr|de'

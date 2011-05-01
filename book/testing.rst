@@ -181,7 +181,7 @@ that it actually does what you expect it to. Use the Crawler to make assertions
 on the DOM::
 
     // Assert that the response matches a given CSS selector.
-    $this->assertTrue(count($crawler->filter('h1')) > 0);
+    $this->assertTrue($crawler->filter('h1')->count() > 0);
 
 Or, test against the Response content directly if you just want to assert that
 the content contains some text, or if the Response is not an XML/HTML
@@ -200,7 +200,7 @@ assertions. To get you started faster, here is a list of the most common and
 useful assertions::
 
     // Assert that the response matches a given CSS selector.
-    $this->assertTrue(count($crawler->filter($selector)) > 0);
+    $this->assertTrue($crawler->filter($selector)->count() > 0);
 
     // Assert that the response matches a given CSS selector n times.
     $this->assertEquals($count, $crawler->filter($selector)->count());
@@ -318,7 +318,6 @@ You can also get the objects related to the latest request::
     $request  = $client->getRequest();
     $response = $client->getResponse();
     $crawler  = $client->getCrawler();
-    $profiler = $client->getProfiler();
 
 If your requests are not insulated, you can also access the ``Container`` and
 the ``Kernel``::
@@ -343,6 +342,16 @@ HTTP layer.
 
     If the information you need to check are available from the profiler, use
     them instead.
+
+Accessing the Profiler Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To assert data collected by the profiler, you can get the profiler like this::
+
+    use Symfony\Component\HttpKernel\Profiler\Profiler;
+
+    $profiler = new Profiler();
+    $profiler = $profiler->loadFromResponse($client->getResponse());
 
 Redirections
 ~~~~~~~~~~~~
@@ -394,17 +403,23 @@ following:
 
 After creation, you can add more nodes:
 
-===================== ================================
-Method                Description                     
-===================== ================================
-``addHTMLDocument()`` An HTML document                
-``addXMLDocument()``  An XML document                 
-``addDOMDocument()``  A ``DOMDocument`` instance      
-``addDOMNodeList()``  A ``DOMNodeList`` instance      
-``addDOMNode()``      A ``DOMNode`` instance          
-``addNodes()``        An array of the above elements  
-``add()``             Accept any of the above elements
-===================== ================================
++-----------------------+----------------------------------+
+| Method                | Description                      |
++=======================+==================================+
+| ``addHTMLDocument()`` | An HTML document                 |
++-----------------------+----------------------------------+
+| ``addXMLDocument()``  | An XML document                  |
++-----------------------+----------------------------------+
+| ``addDOMDocument()``  | A ``DOMDocument`` instance       |
++-----------------------+----------------------------------+
+| ``addDOMNodeList()``  | A ``DOMNodeList`` instance       |
++-----------------------+----------------------------------+
+| ``addDOMNode()``      | A ``DOMNode`` instance           |
++-----------------------+----------------------------------+
+| ``addNodes()``        | An array of the above elements   |
++-----------------------+----------------------------------+
+| ``add()``             | Accept any of the above elements |
++-----------------------+----------------------------------+
 
 Traversing
 ~~~~~~~~~~
@@ -412,21 +427,31 @@ Traversing
 Like jQuery, the Crawler has methods to traverse the DOM of an HTML/XML
 document:
 
-===================== =========================================
-Method                Description
-===================== =========================================
-``filter('h1')``      Nodes that match the CSS selector
-``filterXpath('h1')`` Nodes that match the XPath expression
-``eq(1)``             Node for the specified index
-``first()``           First node
-``last()``            Last node
-``siblings()``        Siblings
-``nextAll()``         All following siblings
-``previousAll()``     All preceding siblings
-``parents()``         Parent nodes
-``children()``        Children
-``reduce($lambda)``   Nodes for which the callable returns true
-===================== =========================================
++-----------------------+----------------------------------------------------+
+| Method                | Description                                        |
++=======================+====================================================+
+| ``filter('h1')``      | Nodes that match the CSS selector                  |
++-----------------------+----------------------------------------------------+
+| ``filterXpath('h1')`` | Nodes that match the XPath expression              |
++-----------------------+----------------------------------------------------+
+| ``eq(1)``             | Node for the specified index                       |
++-----------------------+----------------------------------------------------+
+| ``first()``           | First node                                         |
++-----------------------+----------------------------------------------------+
+| ``last()``            | Last node                                          |
++-----------------------+----------------------------------------------------+
+| ``siblings()``        | Siblings                                           |
++-----------------------+----------------------------------------------------+
+| ``nextAll()``         | All following siblings                             |
++-----------------------+----------------------------------------------------+
+| ``previousAll()``     | All preceding siblings                             |
++-----------------------+----------------------------------------------------+
+| ``parents()``         | Parent nodes                                       |
++-----------------------+----------------------------------------------------+
+| ``children()``        | Children                                           |
++-----------------------+----------------------------------------------------+
+| ``reduce($lambda)``   | Nodes for which the callable does not return false |
++-----------------------+----------------------------------------------------+
 
 You can iteratively narrow your node selection by chaining method calls as
 each method returns a new Crawler instance for the matching nodes::
@@ -639,9 +664,12 @@ The Client used by functional tests creates a Kernel that runs in a special
             toolbar: false
             intercept_redirects: false
 
-        zend:
-            logger:
-                priority: debug
+        monolog:
+            handlers:
+                main:
+                    type:  stream
+                    path:  %kernel.logs_dir%/%kernel.environment%.log
+                    level: debug
 
     .. code-block:: xml
 
@@ -660,9 +688,13 @@ The Client used by functional tests creates a Kernel that runs in a special
                 <framework:test />
             </framework:config>
 
-            <zend:config>
-                <zend:logger priority="debug" />
-            </zend:config>
+            <monolog:config>
+                <monolog:main
+                    type="stream"
+                    path="%kernel.logs_dir%/%kernel.environment%.log"
+                    level="debug"
+                 />               
+            </monolog:config>
         </container>
 
     .. code-block:: php
@@ -680,9 +712,13 @@ The Client used by functional tests creates a Kernel that runs in a special
             'intercept-redirects' => false,
         ));
 
-        $container->loadFromExtension('zend', array(
-            'logger' => array('priority' => 'debug'),
-        ));
+        $container->loadFromExtension('monolog', array(
+            'handlers' => array(
+                'main' => array('type' => 'stream',
+                                'path' => '%kernel.logs_dir%/%kernel.environment%.log'
+                                'level' => 'debug')
+           
+        )));
 
 You can also change the default environment (``test``) and override the
 default debug mode (``true``) by passing them as options to the

@@ -298,7 +298,7 @@ yourself::
                 $error = $this->get('request')->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
             }
 
-            return $this->render('Security:Security:login.html.twig', array(
+            return $this->render('SecurityBundle:Security:login.html.twig', array(
                 // last username entered by the user
                 'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
                 'error'         => $error,
@@ -331,6 +331,11 @@ And the corresponding template might look like this:
             <label for="password">Password:</label>
             <input type="password" id="password" name="_password" />
 
+            <!--
+                To set the target path via the form instead of the session:
+                <input type="hidden" name="_target_path" value="/foo/bar" />
+            -->
+
             <input type="submit" name="login" />
         </form>
 
@@ -347,8 +352,22 @@ And the corresponding template might look like this:
             <label for="password">Password:</label>
             <input type="password" id="password" name="_password" />
 
+            {#
+                To set the target path via the form instead of the session:
+                <input type="hidden" name="_target_path" value="/foo/bar" />
+            #}
+
             <input type="submit" name="login" />
         </form>
+
+.. note::
+
+    The ``_target_path`` by default is dynamically set when accessing a restricted
+    path for which the current user does not have sufficient credentials. However
+    this can lead to race conditions like when the user browses in multiple tabs
+    or because of a missing ``favicon.ico`` that browsers automatically fetch.
+    To prevent this either add the ``_target_path`` to the form or set
+    a static path in the firewall configuration.
 
 The template must have a ``_username`` and ``_password`` fields, and the form
 submission URL must be the value of the ``check_path`` setting
@@ -360,7 +379,7 @@ Finally, add routes for the ``/login`` (``login_path`` value) and
 .. code-block:: xml
 
     <route id="_security_login" pattern="/login">
-        <default key="_controller">Security:Security:login</default>
+        <default key="_controller">SecurityBundle:Security:login</default>
     </route>
 
     <route id="_security_check" pattern="/login_check" />
@@ -795,7 +814,7 @@ firewall, or just for an authentication mechanism:
 
             providers:
                 default:
-                    entity: { class: Security:User, property: username }
+                    entity: { class: SecurityBundle:User, property: username }
                 certificate:
                     users:
                         fabien@example.com: { roles: ROLE_USER }
@@ -818,7 +837,7 @@ firewall, or just for an authentication mechanism:
         <config>
             <encoder class="Symfony\Component\Security\Core\User\User" algorithm="sha1" />
             <provider name="default">
-                <entity class="Security:User" property="username" />
+                <entity class="SecurityBundle:User" property="username" />
             </provider>
 
             <provider name="certificate">
@@ -844,7 +863,7 @@ firewall, or just for an authentication mechanism:
             ),
             'providers' => array(
                 'default' => array(
-                    'entity' => array('class' => 'Security:User', 'property' => 'username'),
+                    'entity' => array('class' => 'SecurityBundle:User', 'property' => 'username'),
                 ),
                 'certificate' => array('users' => array(
                     'fabien@example.com' => array('roles' => 'ROLE_USER'),

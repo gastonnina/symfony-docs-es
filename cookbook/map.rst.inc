@@ -7,6 +7,7 @@
 * :doc:`/cookbook/validation/custom_constraint`
 * :doc:`/cookbook/tools/autoloader`
 * :doc:`/cookbook/tools/finder`
+* :doc:`/cookbook/logging/monolog`
 * :doc:`/cookbook/cache/varnish`
 * :doc:`/cookbook/testing/http_authentication`
 * :doc:`/cookbook/testing/insulating_clients`
@@ -18,4 +19,8 @@
 * :doc:`/cookbook/request/mime_type`
 * :doc:`/cookbook/security/voters`
 * :doc:`/cookbook/doctrine/reverse_engineering`
+* :doc:`/cookbook/doctrine/doctrine_fixtures`
+* :doc:`/cookbook/doctrine/mongodb`
+* :doc:`/cookbook/routing/scheme`
+* :doc:`/cookbook/debugging`
 * :doc:`/cookbook/symfony1`

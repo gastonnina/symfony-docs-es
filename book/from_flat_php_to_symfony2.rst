@@ -20,9 +20,8 @@ deja retomar el contról de su código.
 Un simple Blog en PHP plano
 ---------------------------
 
-In this chapter, you'll build the token blog application using only flat PHP.
-To begin, create a single page that displays blog entries that have been
-persisted to the database. Writing in flat PHP is quick and dirty:
+En este capitulo, usted construirá la aplicación de blog usando solo PHP plano.
+pa empezar, creá una simple pagina que despliegue las entradas de un blog que han sido registradas en ena base de datos. Escrito en PHP plano es rapido y desordenado:
 
 .. code-block:: html+php
 
